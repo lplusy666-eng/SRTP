@@ -1,0 +1,33 @@
+services:
+  api:
+    build:
+      context: .
+    environment:
+      POWER_ECON_CONFIG: /app/configs/demo.yaml
+      POWER_ECON_LLM_PROVIDER: ${POWER_ECON_LLM_PROVIDER:-template}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data
+
+  dashboard:
+    profiles: ["ui"]
+    build:
+      context: .
+      args:
+        PIP_EXTRAS: ui
+    command: ["power-econ", "dashboard", "-c", "/app/configs/demo.yaml"]
+    environment:
+      POWER_ECON_CONFIG: /app/configs/demo.yaml
+      POWER_ECON_LLM_PROVIDER: ${POWER_ECON_LLM_PROVIDER:-template}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      STREAMLIT_SERVER_ADDRESS: 0.0.0.0
+      STREAMLIT_SERVER_PORT: 8501
+      STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./data:/app/data

@@ -1,0 +1,60 @@
+project:
+  timezone: Asia/Shanghai
+  region: 测试区
+  seed: 7
+paths:
+  raw_dir: .test_artifacts/data/raw
+  processed_dir: .test_artifacts/data/processed
+  model_dir: .test_artifacts/models
+  output_dir: .test_artifacts/outputs
+  report_dir: .test_artifacts/reports
+  db_path: .test_artifacts/power_econ.db
+  knowledge_dir: knowledge
+data:
+  mode: demo
+  start: "2024-01-01"
+  end: "2024-03-15"
+  frequency: 1h
+  refresh: true
+  inject_demo_anomalies: true
+  weather: {provider: synthetic}
+  macro: {provider: synthetic, release_lag_months: 1}
+forecaster:
+  lookback: 48
+  horizon: 6
+  seasonal_period: 24
+  hidden_dim: 8
+  num_layers: 1
+  dropout: 0.0
+  batch_size: 128
+  epochs: 1
+  learning_rate: 0.002
+  weight_decay: 0.0
+  patience: 1
+  quantiles: [0.1, 0.5, 0.9]
+  disentangle_weight: 0.01
+  train_ratio: 0.70
+  val_ratio: 0.15
+  device: cpu
+  num_workers: 0
+  gradient_clip_norm: 1.0
+vae:
+  enabled: true
+  sequence_length: 24
+  hidden_dim: 8
+  latent_dim: 3
+  batch_size: 128
+  epochs: 1
+  learning_rate: 0.002
+  beta: 0.001
+  patience: 1
+anomaly:
+  forecast_weight: 0.65
+  vae_weight: 0.35
+  threshold_quantile: 0.95
+  min_separation_hours: 4
+  max_events: 50
+nowcast:
+  enabled: false
+llm: {provider: template, model: gpt-5.6-luna, reasoning_effort: low, max_output_tokens: 1000}
+api: {host: 127.0.0.1, port: 8001, reload: false}

@@ -1,0 +1,4 @@
+timestamp,temperature_2m,relative_humidity_2m,precipitation,wind_speed_10m
+2024-01-01 00:00:00,7.2,73,0.0,8.4
+2024-01-01 01:00:00,6.8,75,0.0,7.9
+2024-01-01 02:00:00,6.5,76,0.0,7.2

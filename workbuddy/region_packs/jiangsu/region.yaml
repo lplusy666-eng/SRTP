@@ -1,0 +1,44 @@
+region:
+  code: CN-JS
+  name: 江苏省
+  level: province
+  timezone: Asia/Shanghai
+  representative_point:
+    name: 南京
+    latitude: 32.06
+    longitude: 118.78
+
+# 江苏包故意不逐条声明 datasets，用 auto 走自动发现 + 格式嗅探路径。
+# 它的列名与浙江完全不同（consumption_month_yi_kwh / mean_temp_c ...），
+# 如果摄入层写得够通用，这个包不需要任何额外配置就能被同一套工具使用。
+#
+# overrides 只用来把嗅探出来的列名换成人类可读的指标名与单位，
+# 不参与"选哪一列"的决策 —— 那个决策必须由嗅探逻辑自己完成。
+datasets: auto
+
+overrides:
+  electricity_monthly:
+    metric: 全社会用电量
+    unit: 亿千瓦时
+  industry_quarterly:
+    metric: 分产业增加值（累计口径）
+    unit: 亿元
+  weather_monthly:
+    metric: 月均气温
+    unit: 摄氏度
+
+kg:
+  kind: knowledge_graph
+  nodes: data/kg_nodes.csv
+  relationships: data/kg_relationships.csv
+  observations: data/kg_observations.csv
+
+knowledge_docs:
+  - data/knowledge
+
+caveats:
+  - 天气为南京单点 ERA5 再分析代理，不代表江苏全省平均。
+  - 最高负荷沿用月报原文，部分月份口径为全网最高负荷、部分为调度最高负荷，跨月比较须谨慎（quality_flag=peak-load-scope-varies）。
+  - 季度 GDP 为年内累计值，不可直接当作单季度当季值。
+  - 数据覆盖 2024-01 至 2025-12。
+  - 春节在 1 月或 2 月之间移动会造成单月同比大幅正负波动，应合并 1—2 月观察。

@@ -1,0 +1,186 @@
+[
+  {
+    "check_id": "E001",
+    "dataset_id": "electricity_monthly",
+    "check_name": "记录数",
+    "passed": true,
+    "detail": "读取 51 条月度记录，范围 2021-01-01 至 2025-03-01",
+    "severity": "error"
+  },
+  {
+    "check_id": "E002",
+    "dataset_id": "electricity_monthly",
+    "check_name": "月度连续性",
+    "passed": true,
+    "detail": "月份连续且无缺口",
+    "severity": "error"
+  },
+  {
+    "check_id": "E003",
+    "dataset_id": "electricity_monthly",
+    "check_name": "月份唯一性",
+    "passed": true,
+    "detail": "每个月唯一",
+    "severity": "error"
+  },
+  {
+    "check_id": "E004",
+    "dataset_id": "electricity_monthly",
+    "check_name": "正值检查",
+    "passed": true,
+    "detail": "全部用电量为正",
+    "severity": "error"
+  },
+  {
+    "check_id": "E005",
+    "dataset_id": "electricity_monthly",
+    "check_name": "指标一致性",
+    "passed": true,
+    "detail": "指标名称：['全社会用电量']",
+    "severity": "error"
+  },
+  {
+    "check_id": "H001",
+    "dataset_id": "holiday_calendar",
+    "check_name": "覆盖年份",
+    "passed": true,
+    "detail": "解析到节假日通知年份：[2021, 2022, 2023, 2024, 2025]",
+    "severity": "error"
+  },
+  {
+    "check_id": "H002",
+    "dataset_id": "holiday_calendar",
+    "check_name": "春节事件",
+    "passed": true,
+    "detail": "2021-2025 每年均解析到春节放假区间",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第一产业_001",
+    "dataset_id": "gdp_第一产业",
+    "check_name": "记录数",
+    "passed": true,
+    "detail": "读取并转换 104 条单季度记录，范围 2000Q1 至 2025Q4",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第一产业_002",
+    "dataset_id": "gdp_第一产业",
+    "check_name": "单季度正值检查",
+    "passed": true,
+    "detail": "全部差分后的单季度值为正",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第一产业_003",
+    "dataset_id": "gdp_第一产业",
+    "check_name": "季度完整性",
+    "passed": true,
+    "detail": "每年 4 个季度完整",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第一产业_004",
+    "dataset_id": "gdp_第一产业",
+    "check_name": "Q4 修订风险标记",
+    "passed": true,
+    "detail": "Q4 由全年累计值减前三季度累计值得到，可能集中吸收年度核算修订；已设置 revision_risk=True",
+    "severity": "warning"
+  },
+  {
+    "check_id": "G_第二产业_001",
+    "dataset_id": "gdp_第二产业",
+    "check_name": "记录数",
+    "passed": true,
+    "detail": "读取并转换 104 条单季度记录，范围 2000Q1 至 2025Q4",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第二产业_002",
+    "dataset_id": "gdp_第二产业",
+    "check_name": "单季度正值检查",
+    "passed": true,
+    "detail": "全部差分后的单季度值为正",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第二产业_003",
+    "dataset_id": "gdp_第二产业",
+    "check_name": "季度完整性",
+    "passed": true,
+    "detail": "每年 4 个季度完整",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第二产业_004",
+    "dataset_id": "gdp_第二产业",
+    "check_name": "Q4 修订风险标记",
+    "passed": true,
+    "detail": "Q4 由全年累计值减前三季度累计值得到，可能集中吸收年度核算修订；已设置 revision_risk=True",
+    "severity": "warning"
+  },
+  {
+    "check_id": "G_第三产业_001",
+    "dataset_id": "gdp_第三产业",
+    "check_name": "记录数",
+    "passed": true,
+    "detail": "读取并转换 104 条单季度记录，范围 2000Q1 至 2025Q4",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第三产业_002",
+    "dataset_id": "gdp_第三产业",
+    "check_name": "单季度正值检查",
+    "passed": true,
+    "detail": "全部差分后的单季度值为正",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第三产业_003",
+    "dataset_id": "gdp_第三产业",
+    "check_name": "季度完整性",
+    "passed": true,
+    "detail": "每年 4 个季度完整",
+    "severity": "error"
+  },
+  {
+    "check_id": "G_第三产业_004",
+    "dataset_id": "gdp_第三产业",
+    "check_name": "Q4 修订风险标记",
+    "passed": true,
+    "detail": "Q4 由全年累计值减前三季度累计值得到，可能集中吸收年度核算修订；已设置 revision_risk=True",
+    "severity": "warning"
+  },
+  {
+    "check_id": "V001",
+    "dataset_id": "electricity_monthly",
+    "check_name": "2024 年度总量外部核验",
+    "passed": true,
+    "detail": "月度求和=6780.8515 亿千瓦时；公开报道=6780 亿千瓦时；相对差=0.013%",
+    "severity": "warning"
+  },
+  {
+    "check_id": "V_GDP_第一产业",
+    "dataset_id": "gdp_第一产业",
+    "check_name": "2025 全年累计值外部核验",
+    "passed": true,
+    "detail": "原始累计值=2657 亿元；统计公报=2657 亿元",
+    "severity": "warning"
+  },
+  {
+    "check_id": "V_GDP_第二产业",
+    "dataset_id": "gdp_第二产业",
+    "check_name": "2025 全年累计值外部核验",
+    "passed": true,
+    "detail": "原始累计值=35682 亿元；统计公报=35682 亿元",
+    "severity": "warning"
+  },
+  {
+    "check_id": "V_GDP_第三产业",
+    "dataset_id": "gdp_第三产业",
+    "check_name": "2025 全年累计值外部核验",
+    "passed": true,
+    "detail": "原始累计值=56206 亿元；统计公报=56206 亿元",
+    "severity": "warning"
+  }
+]

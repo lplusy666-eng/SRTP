@@ -1,0 +1,25 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+.env
+.DS_Store
+
+# 本地真实输入可能包含敏感信息
+data/input/load.csv
+data/input/weather.csv
+data/input/macro.csv
+data/input/events.csv
+
+# 本地生产运行产物
+artifacts/local/
+artifacts/real/
+data/local/
+data/real/

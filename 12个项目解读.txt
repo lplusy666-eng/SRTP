@@ -1,0 +1,491 @@
+联网项目数据获取与新手入门指南
+
+Share
+
+Use the up and down arrow keys to move between messages.
+
+## You said: 联网跑这些项目，告诉我它们在做什么，数据是如何获得的，作为新手重点需要掌握什么，结合代码具体讲解。
+
+### Github项目.txt
+
+25 lines
+
+txt
+
+联网跑这些项目，告诉我它们在做什么，数据是如何获得的，作为新手重点需要掌握什么，结合代码具体讲解。
+
+7月14日
+
+
+
+
+
+## Claude responded: 我把这 13 条链接（去重后 12 个仓库）全部 clone 下来读了源码。先说明一个前提：我没有真正执行它们——大部分需要 OpenAI/Azure/Anthropic 的 API key，数据集又锁在 Google Drive / HuggingFace 后面。所以下面讲的是「读代码得出的结论 + 可跑性实测判断…
+
+确认问题并准备详细中文技术讲解。
+
+确认问题并准备详细中文技术讲解。
+
+我把这 13 条链接（去重后 **12 个仓库**）全部 clone 下来读了源码。先说明一个前提：我**没有真正执行**它们——大部分需要 OpenAI/Azure/Anthropic 的 API key，数据集又锁在 Google Drive / HuggingFace 后面。所以下面讲的是「读代码得出的结论 + 可跑性实测判断」，我会明确标出哪些有坑、哪些开箱即用。
+
+先给你一张全局图，这 12 个不是随机的一堆，它们其实构成了一条完整的技术栈：
+
+层
+
+项目
+
+一句话
+
+最后更新
+
+能跑吗
+
+**传统时序 ML（地基）**
+
+Regional-electricity-news
+
+新闻文本特征 → 英国电力需求预测
+
+2024-06
+
+✅ 补两行 import 就能跑，**纯 CPU、零 API key**
+
+OECD-Weekly-Tracker
+
+Google Trends → 周度 GDP nowcasting
+
+2022-09
+
+❌ **只有数据没有代码**，项目已停更
+
+**LLM 做异常检测**
+
+anomaly-agent
+
+LangGraph 两阶段 LLM 找异常点
+
+2026-04
+
+✅ `pip install anomaly-agent`，10 行跑通
+
+ARGOS (Microsoft)
+
+LLM **写规则代码**而非直接判断
+
+2026-05
+
+⚠️ 需 Azure OpenAI + 自备数据集
+
+Time-RA
+
+异常**诊断+推理**，发布 RATs40K 数据集
+
+2026-01
+
+⚠️ 需 GPU + Azure，脚本里全是占位路径
+
+CausalTAD
+
+LLM 因子发现 + 因果图 + 表格异常检测
+
+2026-02
+
+❌ 缺 `myprompts/` 和 `datasets/` 目录
+
+**LLM 做预测/推理**
+
+TS-Reasoner
+
+工具调用式时序推理（取数→预测→优化）
+
+2026-03
+
+❌ 缺一半文件（`tools/`、`backtest.py`）
+
+nexus-forecasting
+
+5-agent 预测框架，单文件
+
+2026-05
+
+✅ 需 Anthropic key，但作者声明**非官方复现**
+
+**LLM 做经济仿真**
+
+FinRobot
+
+AutoGen 多智能体金融分析平台
+
+2026-07
+
+✅ 最活跃，有 beginner notebook
+
+ACL24-EconAgent
+
+100 个 LLM agent 跑宏观经济仿真
+
+2024-08
+
+⚠️ 只测过 gpt-3.5-turbo-0613，需改 prompt
+
+**基础设施**
+
+MCP servers
+
+LLM 接工具的标准协议参考实现
+
+2026-07
+
+✅ 官方维护
+
+**索引**
+
+Awesome-TS-LLM
+
+152 篇论文清单
+
+2024-12
+
+📚 **已落后一年半**
+
+* * *
+
+### 一、先讲最该先读的：Regional-electricity-demand-forecasting-with-news
+
+**做什么**：用 BBC 新闻做 NLP 特征，预测英国/爱尔兰 5 个地区 1~30 天的**小时级**电力需求。结论是新闻里的军事冲突、交通、疫情、区域经济、国际能源市场话题与电力需求相关，加入这些指标让预测提升最多 9%。
+
+**数据怎么来**：README 给了一个 Google Drive 链接，里面是**已经预处理好**的：
+
+-   `text_features.csv`：BBC 新闻的日频文本特征（2020-06 到 2023-06），包含计数、词频、情感、主题、GloVe 词向量
+-   `Ecodata.csv`：GDP、失业率、通胀
+-   `loadData/`：电力需求的 XY table
+-   原始 BBC 语料**没给**，所以「新闻怎么抓、特征怎么抽」这一步你得自己想办法。
+
+**代码里最关键的一行**，在 `dataLoader.py`：
+
+python
+
+```python
+XY_table_h['issued_date'] = XY_table_h.index
+XY_table_h['target_date'] = XY_table_h['issued_date'].shift(-horizon)
+XY_table_h = XY_table_h.dropna()
+XY_table_h = XY_table_h.set_index('target_date')
+```
+
+这就是**多步预测的全部秘密**：把「发布日」的特征对齐到「目标日」的标签上。新手 90% 的时序 bug 出在这里（用了未来信息 = 数据泄漏）。
+
+另一个漂亮的技巧是文本降维——几百维文本特征直接喂 LightGBM 会过拟合，作者用层次聚类压成 10 个 centroid：
+
+python
+
+```python
+for i in range(1, 11):
+    kmfeats = clusters[i]                 # 第 i 簇包含的特征列名
+    textfeat_H = textFeat[kmfeats]
+    scaler = StandardScaler()             # 先标准化，否则均值被大尺度特征主导
+    textfeat_H.loc[:, :] = scaler.fit_transform(textfeat_H)
+    textCentroids['C'+str(i)] = list(textfeat_H.mean(axis=1))
+```
+
+训练部分是 `MultiOutputRegressor(LGBMRegressor)`（一次预测 24 个小时）+ Optuna 调参 + SHAP 归因。时间切分是硬切：
+
+python
+
+```python
+X_train, X_test = X[X.index < '2023-01-01'], X[X.index >= '2023-01-01']
+scaler_x.fit(X_train)   # 注意：scaler 只 fit 训练集
+```
+
+**⚠️ 实测发现的坑**：`dataLoader.py` 只 `import pandas as pd`，但代码里用了 `pickle` 和 `StandardScaler`。你要自己补：
+
+python
+
+```python
+import pickle
+from sklearn.preprocessing import StandardScaler
+```
+
+`main.py` 里用了 `MultiOutputRegressor` 也没 import。这属于作者上传时漏了，不影响它是这批里**最适合新手动手的项目**。
+
+* * *
+
+### 二、LLM 是怎么"看"时序的：anomaly-agent（学 LLM 工程的最佳模板）
+
+`pip install anomaly-agent` 就能用。它的核心问题很朴素：**怎么把一个 DataFrame 塞进 LLM？**
+
+答案在 `agent.py` 第 547 行，朴素得让人意外：
+
+python
+
+```python
+df_str = df.to_string(index=False)
+```
+
+就是把表格转成纯文本。这是「LLM + 时序」目前最主流也最粗暴的做法。它的代价你要清楚：**长序列 token 会爆炸，而且 LLM 对数值精度不敏感**。
+
+真正值得学的是**结构化输出**——LLM 的自由文本没法直接用，必须用 Pydantic 强约束：
+
+python
+
+```python
+class Anomaly(BaseModel):
+    timestamp: str = Field(description="The timestamp of the anomaly")
+    variable_value: float = Field(...)
+    anomaly_description: str = Field(description="A description of the anomaly")
+
+class AnomalyList(BaseModel):
+    anomalies: List[Anomaly]
+
+# 关键：把 schema 绑给 LLM，它就只能按这个格式吐
+chain = get_detection_prompt(prompt) | llm.with_structured_output(AnomalyList)
+```
+
+架构是 LangGraph 的两阶段状态机 —— **detect → verify**，第二个 LLM 用更严格的标准复核，专门砍假阳性：
+
+python
+
+```python
+graph = StateGraph(AgentState)
+graph.add_node("detect", create_detection_node(llm, ...))
+graph.add_node("verify", create_verification_node(llm, ...))
+graph.add_conditional_edges("detect", should_verify, {...})
+graph.add_edge("verify", END)
+```
+
+还有多模态模式：`include_plot=True` 时把 matplotlib 画的图转 base64 一起发给 LLM，让它「用眼睛看」。
+
+**诚实评价**：这套方法打不过传统统计基线，长序列也 scale 不了。但作为**学 LangGraph + Pydantic 结构化输出**的教材，它是这 12 个里最干净的。
+
+* * *
+
+### 三、范式跃迁：ARGOS —— 让 LLM 写代码，而不是让 LLM 做预测
+
+这是微软的项目，也是我认为**这批里技术含量最高**的一个。
+
+思路：不要问 LLM「这个点异常吗」，而是让它**写一个 Python 函数**：
+
+python
+
+```python
+def is_negative(sample: np.ndarray) -> bool:
+    ...
+```
+
+然后这个函数被存成 `rule.py`，之后跑规则就是纯 numpy，**零 LLM 成本、可审计、可复现、能直接上线到监控系统**。
+
+Agent 分工是一条流水线：`DetectionAgent`（写规则）→ `RepairAgent`（修语法/运行时错误）→ `ReviewAgent`（防过拟合）→ `MutateAgent`（进化式变异）。
+
+Prompt 里有几条**血泪工程经验**，非常值得抄：
+
+> "You should check at least all 4 continuous numbers as a trend rather than `numpy.any`."  
+> "You MUST add or modify ONE rule at a time: when POSITIVE/NORMAL DATA is None you should add ONE rule (ONE if statement)."
+
+翻译一下：LLM 天生喜欢写 `np.any(x > threshold)` 这种**退化规则**——它能完美拟合训练集但毫无泛化。所以要在 prompt 里明令禁止，并强制「一次只加一条 if」，把规则生成变成可控的增量过程。
+
+代码执行部分：
+
+python
+
+```python
+def extract_code(self, text: str, lang: str = "py") -> str:   # 从 ```py 代码块里抠代码
+    ...
+def save_rule(self, rule: str) -> None:
+    with open(self.rule_file, "w") as f:
+        f.write(rule)
+
+# 评估时直接把规则当函数用
+rule_label = np.array([-1 if rule(each) else 1 for each in self.feats[sn]])
+```
+
+`common/exception.py` 里有 `TimeoutException`、`SyntaxException`、`RuntimeException`——**LLM 生成的代码必须超时保护 + 沙箱执行**，这不是可选项。
+
+**数据格式**要求你自己整理：`dataset/metric_i/ts_j.csv`，三列 `value,label,index`。它提供 `utility/generate_csv.py` 转换 KPI 数据集（AIOps 竞赛）和 Yahoo S5 数据集。需要 Azure OpenAI。
+
+* * *
+
+### 四、经济仿真：EconAgent（ACL 2024，清华 FIB Lab）
+
+**做什么**：用 100 个 LLM 当「人」，在 Salesforce 的 ai-economist `Foundation` 环境里跑 240 个月的宏观经济仿真。目标是复现菲利普斯曲线、奥肯定律这些宏观现象——传统 RL agent 做不到。
+
+**数据从哪来？没有外部数据。** `data/profiles.json` 是合成的人口画像（年龄、城市、职业），其余全部由仿真环境产生。这点很多人误会。
+
+核心在 `simulate.py` 的 `gpt_actions()`——**把环境状态渲染成自然语言**：
+
+python
+
+```python
+problem_prompt = f'''
+    You're {name}, a {age}-year-old individual living in {city}. ...
+    Now it's {current_time}.
+'''
+if skill >= states[-1][str(idx)]['skill']:
+    job_prompt = f'''In the previous month, you worked as a(an) {job}. If you continue working
+                     this month, your expected income will be ${skill*max_l:.2f}, which is
+                     increased compared to the last month due to the inflation of labor market.'''
+if price >= env.world.price[-2]:
+    price_prompt = f'''Meanwhile, inflation has led to a price increase in the consumption market...'''
+```
+
+注意最后这两段：作者**刻意把「通胀/通缩」这个词写进 prompt**。这不是废话——它在激活 LLM 预训练里的经济学直觉，让 agent 的决策带上真实人类的行为偏差。这是整篇论文的灵魂。
+
+然后 LLM 返回 JSON，映射回环境动作：
+
+python
+
+```python
+extracted_actions = list(eval(content).values())   # {'work': 0.8, 'consumption': 0.4}
+if not action_check(extracted_actions):
+    extracted_actions = [1, 0.5]                   # 解析失败的兜底
+    gpt_error += 1
+extracted_actions[0] = int(np.random.uniform() <= extracted_actions[0])  # 意愿→伯努利采样
+extracted_actions[1] /= 0.02                       # 连续值→离散档位
+```
+
+`gpt_error` 计数器是个很实用的设计：**LLM 输出不合规范的比例就是你的系统健康度指标**。README 明确说：如果 `gpt_error > 10`，说明模型不适配，要去调 prompt 的格式说明部分。
+
+* * *
+
+### 五、FinRobot：多智能体 + tool calling 的工业级样板
+
+**数据全靠第三方 API**，`config_api_keys` 里要填：
+
+json
+
+```json
+{
+    "FINNHUB_API_KEY": "...",   // 公司新闻、基本面（有免费额度）
+    "FMP_API_KEY": "...",       // 财务数据
+    "SEC_API_KEY": "...",       // SEC 10-K/10-Q 文件
+    "REDDIT_CLIENT_ID": "...",  // 社交情绪
+    "TWITTER_BEARER_TOKEN": "..."
+}
+```
+
+另外 `yfinance` 免费无需 key。
+
+真正要学的是 **tool calling 的 caller/executor 分离**，在 `toolkits.py`：
+
+python
+
+```python
+from autogen import register_function, ConversableAgent
+
+register_function(
+    stringify_output(tool_function),
+    caller=caller,       # 这个 agent 负责"决定调用哪个函数、传什么参数"
+    executor=executor,   # 这个 agent 负责"真的在本地执行"
+    name=name,
+    description=description,   # ← LLM 靠这个 docstring 理解工具用途
+)
+```
+
+**LLM 永远不执行代码，它只输出意图。** 这个分离是所有 agent 框架（AutoGen / LangGraph / MCP）的共同地基。
+
+函数签名用 `Annotated` 写类型说明，框架自动转成 JSON schema 给 LLM：
+
+python
+
+```python
+def get_stock_data(
+    symbol: Annotated[str, "ticker symbol"],
+    start_date: Annotated[str, "start date for retrieving stock price data, YYYY-mm-dd"],
+    ...
+) -> DataFrame:
+    """retrieve stock price data for designated ticker symbol"""  # ← 这句 docstring 就是 tool description
+```
+
+一个 agent = **profile（system prompt）+ toolkits（函数列表）**，见 `agents/agent_library.py`：
+
+python
+
+```python
+{
+    "name": "Market_Analyst",
+    "profile": "As a Market Analyst, ... For coding tasks, only use the functions you have been provided with. Reply TERMINATE when the task is done.",
+    "toolkits": [
+        FinnHubUtils.get_company_profile,
+        FinnHubUtils.get_company_news,
+        FinnHubUtils.get_basic_financials,
+        YFinanceUtils.get_stock_data,
+    ],
+}
+```
+
+入口：`tutorials_beginner/agent_annual_report.ipynb`（从 SEC 10-K + 股价 → 自动生成 PDF 年报分析）。
+
+* * *
+
+### 六、剩下几个的快速判断
+
+**Time-RA** —— 最值得学的是它的**数据构造流程**（`labeling/gen_reason_label_with_gpt.py`）：用 GPT-4o 给已有的异常检测数据打「推理标签」，再用 `rank_models.py` 做偏好排序，最后 LoRA 微调 8 个开源小模型（qwen2.5-3b/7b、llama-3-8b、gemma、phi-4-mini、deepseek-7b）。这就是 **LLM 造数据 → 蒸馏小模型** 的标准范式。数据集 RATs40K 已开源在 HuggingFace。缺点：脚本里全是 `/path/to/model` 占位符。
+
+**CausalTAD** —— 名字里的 TAD 是 **Tabular**（表格）不是时序，这是你这个列表里唯一的非时序项目。流程是 COAT 式的：LLM 从原始列（车龄、保单类型…）里发现**高层语义因子** → LLM 给每条样本标注因子 → 用 `causallearn` 的 PC/FCI/GES 在因子层面学因果图 → 把因果知识注入 AnoLLM 微调。核心洞察是：**直接对高维原始列跑 PC 算法样本量不够也不可解释，先让 LLM 降到语义因子层再做因果发现**。⚠️ 仓库里缺 `myprompts/` 和 `datasets/` 目录，`config.py` 会直接 `FileNotFoundError`。
+
+**TS-Reasoner** —— 思路很好（LLM 把复杂问题分解成工具链：取数 → 预测 → 优化 → 回答），工具箱包括 `getElectricityDataOP`（gridstatus.io API，美国 caiso/ercot/pjm 等电网小时级负荷）、`getEnvDataOP`（天气/空气质量）、`GenFuncOP`（带约束的调度优化）、TEMPO 时序基础模型。**但仓库里只有 `Module.py` 和 `Annotation.py`，`tools/` 整个包和 `backtest.py` 都不在**。当论文的补充材料读，别指望跑起来。
+
+**nexus-forecasting** —— 单文件，5 个 agent（A\_ctx → A\_macro + A\_micro → A\_syn → A\_calib）。用 Anthropic API。最脆弱的一环是 `parse_forecasted_values()`——从 LLM 自由文本里正则抠数字。作者**自己明确声明这是非官方复现、未经验证**，不要当 baseline 引用。
+
+**OECD-Weekly-Tracker** —— 我要泼冷水：**这个 repo 里一行模型代码都没有**，只有 `Data/`（xlsx + csv）、`Figures/`、几个 SHAP pickle。数据止于 2022-09-11，项目已停更。它的价值是当 benchmark 数据。如果你想自己复现 Google Trends nowcasting，最大的坑是：**Trends 返回的是相对搜索热度且带抽样噪声，同一查询不同时间抓到的数据不一样**——这让复现几乎不可能精确。
+
+**Awesome-TimeSeries-SpatioTemporal-LM-LLM** —— 152 条论文，但最后更新 2024-12，已经落后一年半。当**入门索引**可以，别当 SOTA 依据。
+
+**MCP servers** —— 和其他 11 个完全不同层次。MCP 是现在 LLM 接工具的事实标准协议。核心 API 就两个装饰器：
+
+python
+
+```python
+@server.list_tools()
+async def list_tools() -> list[Tool]:
+    return [Tool(name="fetch", description="...", inputSchema=Fetch.model_json_schema())]
+
+@server.call_tool()
+async def call_tool(name, arguments: dict) -> list[TextContent]:
+    ...
+```
+
+**如果你想把上面任何一个项目变成 Claude/Cursor 能直接调用的工具，你要做的就是写一个 MCP server。** 官方 README 明说这些是教学参考实现，不是生产就绪。
+
+* * *
+
+### 七、新手真正要掌握的 6 件事（横向抽取）
+
+1.  **时序怎么"喂"给 LLM** —— 三条路：纯文本 `df.to_string()`（anomaly-agent）、逗号分隔数值串（TS-Reasoner）、画成图走多模态（Time-RA、ARGOS 的 ImageAgent）。三者的 token 成本和精度权衡完全不同，选错就是钱白烧。
+2.  **结构化输出是地基** —— 从 EconAgent 的 `try: eval(content) except: fallback` 到 anomaly-agent 的 Pydantic + validator，这是同一件事的原始版和工业版。**永远假设 LLM 会吐垃圾，永远写 fallback，永远统计失败率**。
+3.  **caller / executor 分离** —— LLM 只产出意图，执行在本地。FinRobot 的 `register_function`、MCP 的 `list_tools`/`call_tool` 是同一个抽象。
+4.  **LLM-as-code-generator > LLM-as-predictor** —— ARGOS 是标杆。让 LLM 写规则/写代码，然后本地跑。可审计、可复现、上线零成本。这是 2025–2026 agent 系统的主流方向，也是你做工程落地时最该选的路。
+5.  **时序 ML 的基本功不能跳过** —— `shift(-horizon)` 对齐、时间硬切分（**绝不 shuffle**）、scaler 只 fit 训练集、多输出回归、SHAP 归因。没有这一层，上面所有 LLM 花活都是空中楼阁——而且你会发现很多 LLM 方法根本打不过一个调好的 LightGBM。
+6.  **数据获取的三种模式** —— 公开 API（yfinance / Finnhub / gridstatus / Google Trends）、benchmark 打包下载（ODDS / KPI / Yahoo S5 / TSAIA / RATs40K）、纯仿真合成（EconAgent）。你要清楚自己的课题属于哪一种。
+
+* * *
+
+### 八、我建议的上手顺序
+
+**第 1 周 · Regional-electricity-news** — 补两行 import，纯 CPU，零 API key，能真跑通。打牢时序 ML 基本功，看懂 SHAP 怎么解释文本特征的贡献。
+
+**第 2 周 · anomaly-agent** — `pip install` 后 10 行代码跑通。学 LangGraph 状态机 + Pydantic 结构化输出。这是 LLM 工程的最小完整闭环。
+
+**第 3 周 · FinRobot** — 跑 `tutorials_beginner/agent_annual_report.ipynb`。学多 agent 协作 + tool calling 注册。注册一个 Finnhub 免费 key 就够。
+
+**第 4 周 · ARGOS + MCP servers** — 前者学 LLM 生成规则代码的范式，后者学怎么把自己的工具封装成标准协议。这两个合起来，你就有了「做一个能被 Claude 直接调用的时序分析工具」的完整能力。
+
+**之后按兴趣分叉**：想做仿真 → EconAgent；想做微调 → Time-RA；想做因果 → CausalTAD。
+
+需要我把某一个项目拆得更细吗？比如我可以在容器里把 Regional-electricity 那个仓库的 import bug 补好、用合成数据造一份 mock 的 `text_features.csv` 和 `loadData/`，让整条 pipeline 真的跑起来给你看——那样你就能直接对着能运行的代码调试。
+
+
+
+
+
+  
+
+
+
+Opus 4.8 High
+
+
+
+
+
+
+
+[Claude is AI and can make mistakes. Please double-check responses.](https://support.anthropic.com/en/articles/8525154-claude-is-providing-incorrect-or-misleading-responses-what-s-going-on)

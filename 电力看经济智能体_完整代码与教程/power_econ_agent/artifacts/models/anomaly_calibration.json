@@ -1,0 +1,11 @@
+{
+  "forecast_median": 0.5366325444817391,
+  "forecast_scale": 0.46061214754560065,
+  "vae_median": 0.47523483633995056,
+  "vae_scale": 0.19681900080442427,
+  "threshold": 2.98044966211476,
+  "threshold_quantile": 0.975,
+  "forecast_weight": 0.65,
+  "vae_weight": 0.35,
+  "validation_points": 2609
+}

@@ -1,0 +1,9 @@
+﻿period,year,quarter,gdp_total_yi_yuan,gdp_yoy_pct,primary_yi_yuan,primary_yoy_pct,secondary_yi_yuan,secondary_yoy_pct,tertiary_yi_yuan,tertiary_yoy_pct,source_url,quality_flag
+2024-Q1,2024,1,31020.41,6.2,638.71,3.1,13132.9,7.5,17248.81,5.3,https://tj.jiangsu.gov.cn/art/2024/4/22/art_85276_11223931.html,official-published
+2024-Q2,2024,2,63326.3,5.8,1736.2,3.0,27709.7,7.1,33880.4,4.8,https://www.jiangsu.gov.cn/art/2024/7/24/art_34151_11305109.html,official-published
+2024-Q3,2024,3,97744.3,5.7,2838.1,2.6,42413.2,6.0,52493.0,5.6,https://tj.jiangsu.gov.cn/art/2024/10/24/art_85275_11400783.html,official-published
+2024-Q4,2024,4,137008.0,5.8,5245.2,3.1,59180.1,5.5,72582.8,6.2,https://tj.jiangsu.gov.cn/art/2025/3/15/art_85764_11514117.html,official-published
+2025-Q1,2025,1,33088.6,5.9,677.3,5.1,13580.3,5.8,18831.0,5.9,https://m.people.cn/n4/2025/0422/c1545-21613260.html,official-statistics-republished
+2025-Q2,2025,2,66967.8,5.7,1777.6,4.2,28391.1,5.5,36799.1,5.9,https://tj.jiangsu.gov.cn/art/2025/7/22/art_85276_11605717.html,official-published
+2025-Q3,2025,3,102811.0,5.4,3241.4,3.6,43450.8,5.2,56118.8,5.6,https://tj.jiangsu.gov.cn/art/2025/10/25/art_85275_11662557.html,official-published
+2025-Q4,2025,4,142351.5,5.3,5369.7,3.5,60038.2,4.7,76943.7,5.8,https://tj.jiangsu.gov.cn/art/2026/3/19/art_85764_11744302.html,official-published

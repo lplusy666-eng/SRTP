@@ -1,0 +1,76 @@
+# ============================================================
+# “电力看经济”智能体 —— 全局配置
+# ============================================================
+
+project:
+  name: "PowerEconomyAgent"
+  region: "浙江省"          # 分析区域（影响天气/节假日/经济数据）
+  start_date: "2019-01-01"
+  end_date:   "2024-12-31"
+  freq: "D"                 # 数据频率：D=日, W=周, M=月
+
+# ---------------- 数据获取 ----------------
+data:
+  # 电量数据：真实数据放到 data/raw/electricity.csv（列: date, electricity）
+  # 若文件不存在，则自动使用合成数据生成器（用于演示/跑通流程）
+  electricity_csv: "data/raw/electricity.csv"
+  use_synthetic_if_missing: true
+
+  # 天气：使用 Open-Meteo 历史API（免费、无需Key）
+  weather:
+    enabled: true
+    latitude: 30.29          # 杭州
+    longitude: 120.16
+    cache_csv: "data/raw/weather.csv"
+
+  # 经济指标：真实数据放到 data/raw/economic.csv（列: date, gdp_yoy, pmi, ...）
+  economic_csv: "data/raw/economic.csv"
+  use_synthetic_economic_if_missing: true
+
+  merged_csv: "data/processed/merged_dataset.csv"
+
+# ---------------- 特征解耦 ----------------
+decoupling:
+  stl_period: 7             # STL季节性周期（日频用7表示周周期；月频改为12）
+  temperature_base: 18.0    # 舒适温度基准(℃)，用于计算HDD/CDD
+  wavelet: "db4"            # 小波基
+  wavelet_level: 4          # 跨尺度分解层数
+  output_csv: "data/processed/decoupled_signal.csv"
+
+# ---------------- VAE 异常检测 ----------------
+vae:
+  window: 30               # 滑窗长度
+  latent_dim: 8
+  hidden_dim: 64
+  epochs: 60
+  batch_size: 64
+  lr: 0.001
+  anomaly_quantile: 0.90   # 重构误差分位数阈值
+  model_path: "outputs/vae_model.pt"
+  anomaly_csv: "outputs/anomalies.csv"
+
+# ---------------- 知识图谱 ----------------
+knowledge_graph:
+  graph_path: "outputs/kg.graphml"
+  seed_csv: "data/raw/kg_seed.csv"   # 可选：自定义实体关系种子
+
+# ---------------- RAG ----------------
+rag:
+  docs_dir: "data/raw/knowledge_docs"   # 放置政策/行业/宏观知识文档(.txt/.md)
+  index_path: "outputs/rag_index.pkl"
+  top_k: 4
+  embed_backend: "hash"    # hash(离线,零依赖) 或 openai(需Key)
+
+# ---------------- 大模型 / LLM ----------------
+# 兼容 OpenAI 接口的服务均可（DeepSeek / 通义千问兼容模式 / 智谱 / OpenAI 等）
+llm:
+  enabled: false           # true 时启用真实大模型；false 走离线模板(便于无Key跑通)
+  base_url: "https://api.deepseek.com/v1"   # 示例：DeepSeek
+  api_key_env: "LLM_API_KEY"                # 从环境变量读取Key
+  model: "deepseek-chat"
+  temperature: 0.3
+  max_tokens: 1200
+
+# ---------------- 报告输出 ----------------
+report:
+  output_md: "outputs/economic_report.md"

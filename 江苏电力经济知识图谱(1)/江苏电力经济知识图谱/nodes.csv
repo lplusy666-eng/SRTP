@@ -1,0 +1,124 @@
+﻿node_id,label,name,category,description,source_url,quality_flag
+project_js,Project,江苏电力经济知识图谱,project,2024—2025月度电力—经济—天气—日历融合,,concept
+region_js,Region,江苏省,region,研究区域,,concept
+domain_power,Domain,电力系统,domain,,,concept
+domain_economy,Domain,经济活动,domain,,,concept
+domain_weather,Domain,天气条件,domain,,,concept
+domain_calendar,Domain,日历制度,domain,,,concept
+ind_consumption,Indicator,全社会用电量,indicator,单位：亿千瓦时,,concept
+ind_consumption_yoy,Indicator,全社会用电量同比,indicator,单位：%,,concept
+ind_generation,Indicator,发电量,indicator,单位：亿千瓦时,,concept
+ind_generation_yoy,Indicator,发电量同比,indicator,单位：%,,concept
+ind_capacity,Indicator,装机容量,indicator,单位：万千瓦,,concept
+ind_peak_load,Indicator,官方报告最高负荷,indicator,单位：万千瓦,,concept
+ind_gdp,Indicator,地区生产总值(累计),indicator,单位：亿元,,concept
+ind_gdp_yoy,Indicator,GDP同比(累计),indicator,单位：%,,concept
+ind_secondary_gdp,Indicator,第二产业增加值(累计),indicator,单位：亿元,,concept
+ind_tertiary_gdp,Indicator,第三产业增加值(累计),indicator,单位：亿元,,concept
+ind_mean_temp,Indicator,南京代表点月均温,indicator,单位：℃,,concept
+ind_hot_days,Indicator,南京代表点≥35℃天数,indicator,单位：天,,concept
+ind_cdd18,Indicator,制冷度日(18℃基准),indicator,单位：度日,,concept
+ind_hdd18,Indicator,采暖度日(18℃基准),indicator,单位：度日,,concept
+ind_workdays,Indicator,月工作日数,indicator,单位：天,,concept
+ind_holiday_days,Indicator,法定放假区间天数,indicator,单位：天,,concept
+concept_economic_activity,Concept,经济活动强弱,机制,,,concept
+concept_industrial_output,Concept,工业生产,机制,,,concept
+concept_service_demand,Concept,服务业与居民需求,机制,,,concept
+concept_high_temp,Concept,高温制冷需求,天气机制,,,concept
+concept_low_temp,Concept,低温采暖需求,天气机制,,,concept
+concept_holiday_shift,Concept,春节/长假月份错位,日历机制,,,concept
+concept_energy_efficiency,Concept,能源效率变化,经济机制,,,concept
+concept_industry_structure,Concept,产业结构变化,经济机制,,,concept
+concept_digital_economy,Concept,数据中心与数字经济负荷,结构机制,,,concept
+concept_distributed_energy,Concept,分布式新能源与自发自用,供给机制,,,concept
+concept_price_policy,Concept,电价与政策,制度机制,,,concept
+concept_stat_scope,Concept,统计口径差异,数据风险,,,concept
+month_2024-01,Month,2024-01,time,,,concept
+source_001,Source,国家能源局江苏监管办 2024-01 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202402/t20240223_257097.html,official-published
+source_002,Source,Open-Meteo ERA5再分析（南京代表点）,source,,https://archive-api.open-meteo.com/v1/archive?latitude=32.06&longitude=118.78&start_date=2024-01-01&end_date=2025-12-31&daily=temperature_2m_mean%2Ctemperature_2m_max%2Ctemperature_2m_min%2Cprecipitation_sum%2Cwind_speed_10m_max&timezone=Asia%2FShanghai,reanalysis-point-proxy
+anomaly_2024-01,AnomalyAssessment,2024-01 异常诊断,diagnosis,月度用电同比显著波动；低温采暖负荷可能上升；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中高
+quarter_2024-Q1,Quarter,2024-Q1,time,,,concept
+month_2024-02,Month,2024-02,time,,,concept
+source_003,Source,国家能源局江苏监管办 2024-02 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202403/t20240319_259234.html,official-published
+anomaly_2024-02,AnomalyAssessment,2024-02 异常诊断,diagnosis,月度用电同比显著波动；低温采暖负荷可能上升；长假/月度工作日结构变化；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中高
+month_2024-03,Month,2024-03,time,,,concept
+source_004,Source,国家能源局江苏监管办 2024-03 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202404/t20240415_260710.html,official-published
+anomaly_2024-03,AnomalyAssessment,2024-03 异常诊断,diagnosis,月度用电同比显著波动；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中
+month_2024-04,Month,2024-04,time,,,concept
+source_005,Source,国家能源局江苏监管办 2024-04 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202405/t20240517_263109.html,official-published
+anomaly_2024-04,AnomalyAssessment,2024-04 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+quarter_2024-Q2,Quarter,2024-Q2,time,,,concept
+month_2024-05,Month,2024-05,time,,,concept
+source_006,Source,国家能源局江苏监管办 2024-05 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202406/t20240617_264655.html,official-published
+anomaly_2024-05,AnomalyAssessment,2024-05 异常诊断,diagnosis,长假/月度工作日结构变化；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2024-06,Month,2024-06,time,,,concept
+source_007,Source,国家能源局江苏监管办 2024-06 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202407/t20240715_266191.html,official-published
+anomaly_2024-06,AnomalyAssessment,2024-06 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2024-07,Month,2024-07,time,,,concept
+source_008,Source,国家能源局江苏监管办 2024-07 月报,source,,https://jsb.nea.gov.cn/ztzl/xzxk/zzdt/202408/t20240827_268451.html,official-published
+anomaly_2024-07,AnomalyAssessment,2024-07 异常诊断,diagnosis,月度用电同比显著波动；高温制冷负荷显著；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中
+quarter_2024-Q3,Quarter,2024-Q3,time,,,concept
+month_2024-08,Month,2024-08,time,,,concept
+source_009,Source,国家能源局江苏监管办 2024-08 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202409/t20240914_269559.html,official-published
+anomaly_2024-08,AnomalyAssessment,2024-08 异常诊断,diagnosis,月度用电同比显著波动；高温制冷负荷显著；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中
+month_2024-09,Month,2024-09,time,,,concept
+source_010,Source,国家能源局江苏监管办 2024-09 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202410/t20241015_270827.html,official-published
+anomaly_2024-09,AnomalyAssessment,2024-09 异常诊断,diagnosis,月度用电同比显著波动；高温制冷负荷显著；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中
+month_2024-10,Month,2024-10,time,,,concept
+source_011,Source,国家能源局江苏监管办 2024-10 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202411/t20241114_272302.html,official-published
+anomaly_2024-10,AnomalyAssessment,2024-10 异常诊断,diagnosis,长假/月度工作日结构变化；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+quarter_2024-Q4,Quarter,2024-Q4,time,,,concept
+month_2024-11,Month,2024-11,time,,,concept
+source_012,Source,国家能源局江苏监管办 2024-11 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202412/t20241217_274060.html,official-published
+anomaly_2024-11,AnomalyAssessment,2024-11 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2024-12,Month,2024-12,time,,,concept
+source_013,Source,国家能源局江苏监管办 2024-12 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202501/t20250120_275540.html,official-published
+anomaly_2024-12,AnomalyAssessment,2024-12 异常诊断,diagnosis,低温采暖负荷可能上升；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-01,Month,2025-01,time,,,concept
+source_014,Source,国家能源局江苏监管办 2025-01 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202502/t20250217_276674.html,official-published
+anomaly_2025-01,AnomalyAssessment,2025-01 异常诊断,diagnosis,月度用电同比显著波动；低温采暖负荷可能上升；长假/月度工作日结构变化；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中高
+quarter_2025-Q1,Quarter,2025-Q1,time,,,concept
+month_2025-02,Month,2025-02,time,,,concept
+source_015,Source,国家能源局江苏监管办 2025-02 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202503/t20250321_278422.html,official-published
+anomaly_2025-02,AnomalyAssessment,2025-02 异常诊断,diagnosis,月度用电同比显著波动；低温采暖负荷可能上升；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中高
+month_2025-03,Month,2025-03,time,,,concept
+source_016,Source,国家能源局江苏监管办 2025-03 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202504/t20250417_279734.html,official-published
+anomaly_2025-03,AnomalyAssessment,2025-03 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-04,Month,2025-04,time,,,concept
+source_017,Source,国家能源局江苏监管办 2025-04 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202505/t20250519_281184.html,official-published
+anomaly_2025-04,AnomalyAssessment,2025-04 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+quarter_2025-Q2,Quarter,2025-Q2,time,,,concept
+month_2025-05,Month,2025-05,time,,,concept
+source_018,Source,国家能源局江苏监管办 2025-05 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202506/t20250618_283056.html,official-published
+anomaly_2025-05,AnomalyAssessment,2025-05 异常诊断,diagnosis,长假/月度工作日结构变化；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-06,Month,2025-06,time,,,concept
+source_019,Source,国家能源局江苏监管办 2025-06 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202507/t20250718_284530.html,official-published
+anomaly_2025-06,AnomalyAssessment,2025-06 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-07,Month,2025-07,time,,,concept
+source_020,Source,国家能源局江苏监管办 2025-07 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202508/t20250819_285911.html,official-published
+anomaly_2025-07,AnomalyAssessment,2025-07 异常诊断,diagnosis,月度用电同比显著波动；高温制冷负荷显著；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中
+quarter_2025-Q3,Quarter,2025-Q3,time,,,concept
+month_2025-08,Month,2025-08,time,,,concept
+source_021,Source,国家能源局江苏监管办 2025-08 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202509/t20250919_287691.html,official-published
+anomaly_2025-08,AnomalyAssessment,2025-08 异常诊断,diagnosis,高温制冷负荷显著；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-09,Month,2025-09,time,,,concept
+source_022,Source,国家能源局江苏监管办 2025-09 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202510/t20251016_288812.html,official-published
+anomaly_2025-09,AnomalyAssessment,2025-09 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-10,Month,2025-10,time,,,concept
+source_023,Source,国家能源局江苏监管办 2025-10 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202511/t20251118_290592.html,official-published
+anomaly_2025-10,AnomalyAssessment,2025-10 异常诊断,diagnosis,月度用电同比显著波动；长假/月度工作日结构变化；用电与GDP增速出现较大偏离；只能给出候选解释，不能仅凭相关性认定因果,,confidence-中
+quarter_2025-Q4,Quarter,2025-Q4,time,,,concept
+month_2025-11,Month,2025-11,time,,,concept
+source_024,Source,国家能源局江苏监管办 2025-11 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202512/t20251218_292547.html,official-published
+anomaly_2025-11,AnomalyAssessment,2025-11 异常诊断,diagnosis,未触发强异常阈值；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+month_2025-12,Month,2025-12,time,,,concept
+source_025,Source,国家能源局江苏监管办 2025-12 月报,source,,https://jsb.nea.gov.cn/dtyw/jgdt/202601/t20260116_294284.html,official-published
+anomaly_2025-12,AnomalyAssessment,2025-12 异常诊断,diagnosis,低温采暖负荷可能上升；只能给出候选解释，不能仅凭相关性认定因果,,confidence-低
+source_026,Source,江苏GDP 2024-Q1 数据源,source,,https://tj.jiangsu.gov.cn/art/2024/4/22/art_85276_11223931.html,official-published
+source_027,Source,江苏GDP 2024-Q2 数据源,source,,https://www.jiangsu.gov.cn/art/2024/7/24/art_34151_11305109.html,official-published
+source_028,Source,江苏GDP 2024-Q3 数据源,source,,https://tj.jiangsu.gov.cn/art/2024/10/24/art_85275_11400783.html,official-published
+source_029,Source,江苏GDP 2024-Q4 数据源,source,,https://tj.jiangsu.gov.cn/art/2025/3/15/art_85764_11514117.html,official-published
+source_030,Source,江苏GDP 2025-Q1 数据源,source,,https://m.people.cn/n4/2025/0422/c1545-21613260.html,official-statistics-republished
+source_031,Source,江苏GDP 2025-Q2 数据源,source,,https://tj.jiangsu.gov.cn/art/2025/7/22/art_85276_11605717.html,official-published
+source_032,Source,江苏GDP 2025-Q3 数据源,source,,https://tj.jiangsu.gov.cn/art/2025/10/25/art_85275_11662557.html,official-published
+source_033,Source,江苏GDP 2025-Q4 数据源,source,,https://tj.jiangsu.gov.cn/art/2026/3/19/art_85764_11744302.html,official-published

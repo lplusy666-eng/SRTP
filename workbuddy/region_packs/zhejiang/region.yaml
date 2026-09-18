@@ -1,0 +1,70 @@
+region:
+  code: CN-ZJ
+  name: 浙江省
+  level: province
+  timezone: Asia/Shanghai
+  representative_point:
+    name: 杭州
+    latitude: 30.2741
+    longitude: 120.1551
+
+# datasets 可以显式声明，也可以写 "auto" 让摄入层自动扫描 data/ 并嗅探格式。
+# 显式声明只是为了让"这条序列叫什么、单位是什么"对人类可读，
+# 摄入层在缺少声明时依然能工作 —— 这是"接入任意地区"的关键。
+datasets:
+  - id: electricity_monthly
+    kind: timeseries
+    path: data/electricity_monthly.csv
+    date_column: month
+    value_column: assumed_value_yi_kwh
+    metric: 全社会用电量
+    unit: 亿千瓦时
+    frequency: monthly
+    industry: null
+
+  - id: industry_quarterly
+    kind: timeseries
+    path: data/industry_quarterly.csv
+    date_column: period
+    value_column: value_yi_yuan
+    metric: 分产业增加值
+    unit: 亿元
+    frequency: quarterly
+    group_column: indicator_name
+
+  - id: weather_monthly
+    kind: timeseries
+    path: data/weather_monthly.csv
+    date_column: month
+    value_column: temperature_mean_c
+    metric: 月均气温
+    unit: 摄氏度
+    frequency: monthly
+
+  - id: calendar_daily
+    kind: calendar
+    path: data/calendar_daily.csv
+    date_column: date
+
+  - id: calendar_monthly
+    kind: calendar
+    path: data/calendar_monthly.csv
+    date_column: month
+
+  - id: kg
+    kind: knowledge_graph
+    nodes: data/kg_nodes.csv
+    relationships: data/kg_relationships.csv
+    observations: data/kg_observations.csv
+
+knowledge_docs:
+  - data/knowledge
+
+# caveats 会原样进入 LLM 上下文。凡是"这个数据不能怎么用"的话都写在这里，
+# 让模型在判断时自己知道边界，而不是靠人去记。
+caveats:
+  - 天气为杭州单点 ERA5 再分析，是省级代表点代理变量，不代表全省加权平均。
+  - 季度 GDP 为年内累计值，不可直接当作单季度当季值；本包已在 industry_quarterly 中保留原始累计口径。
+  - 用电量原始表未标注单位，按数量级推断为亿千瓦时（源表 quality_flag=unit-inferred）。
+  - 2025-03 之后无新数据，任何"最近"的判断都以 2025-03 为最后观测期。
+  - 图谱中的 AFFECTS / PROXIES_FOR / DISTURBS 是机制先验，不代表已证因果。

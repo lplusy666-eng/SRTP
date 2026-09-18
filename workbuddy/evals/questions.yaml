@@ -1,0 +1,213 @@
+# 评测集。
+#
+# 这是判断"系统判断得准不准"的唯一客观标准 —— 没有它，所有讨论都只能靠感觉。
+#
+# 每道题包含三部分：
+#   question    自然语言问题，直接喂给智能体
+#   expect      期望行为。分两类检查：
+#               - 硬检查（任何规划器都要满足）：因果强度不得越界、禁止因果断言用词、
+#                 反证与不确定性必须非空、置信度不得虚高、必须提到关键概念
+#               - 软检查（仅 LLM 规划器适用）：必须调用过哪些工具
+#   note        这道题在考什么，以及为什么这个期望是对的
+#
+# 关于置信度上限：本项目所有结论的置信度都不应超过 0.85。
+# 因为输入是省级公开月度数据 + 单点气象代理 + 相关性级别的归因，
+# 任何"非常确信"的表述都说明系统高估了自己。
+
+meta:
+  version: "0.1"
+  max_allowed_confidence: 0.85
+  forbidden_phrases:
+    - "证明了"
+    - "证实了"
+    - "导致经济"
+    - "说明经济走弱"
+    - "说明经济向好"
+    - "经济已经下滑"
+    - "一定是"
+    - "causedBy"
+  forbidden_causal_status:
+    - established
+
+cases:
+  - id: zj-01
+    region: zhejiang
+    question: "2025年1月浙江用电同比下降，是经济原因吗？"
+    period: "2025-01"
+    expect:
+      must_call: [list_region_datasets, load_series, decompose_series, detect_anomaly, explain_anomaly]
+      must_mention_any: ["季节", "春节", "日历", "残差"]
+      min_confidence: 0.3
+    note: >
+      考"能否顶住用户预设"。该期残差接近零，同比下降完全由季节与春节错位造成。
+      正确回答是"不构成经济信号"，而不是顺着用户"是经济原因吗"的预设编原因。
+
+  - id: zj-02
+    region: zhejiang
+    question: "2021年2月浙江用电大幅偏离正常水平，是什么原因？"
+    period: "2021-02"
+    expect:
+      must_call: [decompose_series, detect_anomaly, explain_anomaly, get_calendar_context]
+      must_mention_any: ["春节", "日历", "样本", "端点"]
+      min_confidence: 0.2
+      max_confidence: 0.6
+    note: >
+      该期残差大，但处于序列开头"不足一个季节周期"区间，端点效应污染严重。
+      期望系统既给出候选原因，也标注数据构造风险，且置信度不高。
+
+  - id: zj-03
+    region: zhejiang
+    question: "浙江用电量的季节性有多强？"
+    expect:
+      must_call: [decompose_series]
+      must_mention_any: ["季节"]
+      min_confidence: 0.4
+    note: 浙江月度季节强度约 0.78，属明显季节主导。期望系统给出具体强度数值。
+
+  - id: zj-04
+    region: zhejiang
+    question: "浙江用电量的长期趋势是怎样的？"
+    expect:
+      must_call: [decompose_series]
+      must_mention_any: ["趋势"]
+    note: 考趋势项解读，以及是否会把趋势增长直接说成经济增长。
+
+  - id: zj-05
+    region: zhejiang
+    question: "浙江最近一期的用电量是多少？同比变化多少？"
+    expect:
+      must_call: [load_series]
+      must_mention_any: ["同比", "用电"]
+    note: 考最基础的数据读取。期望给出具体数值与期次。
+
+  - id: zj-06
+    region: zhejiang
+    question: "浙江的用电数据质量怎么样？有什么需要注意的问题？"
+    expect:
+      must_call: [list_region_datasets, data_quality_report]
+      must_mention_any: ["单位", "推断", "缺", "质量"]
+    note: 考数据质量意识。浙江用电单位是推断的（unit-inferred），必须被提及。
+
+  - id: zj-07
+    region: zhejiang
+    question: "春节对浙江用电量有什么影响？"
+    expect:
+      must_mention_any: ["春节", "日历"]
+    note: 考领域知识检索。期望系统说明春节错位会污染单月同比，应合并1—2月观察。
+
+  - id: zj-08
+    region: zhejiang
+    question: "天气对浙江用电量的影响有多大？"
+    expect:
+      must_call: [get_weather_context]
+      must_mention_any: ["气温", "代理", "度日"]
+    note: >
+      考代理变量声明。浙江天气是杭州单点 ERA5 代理，不是全省加权平均。
+      正确回答必须包含这个限制。
+
+  - id: zj-09
+    region: zhejiang
+    question: "浙江2021年1月的用电异常是怎么回事？"
+    period: "2021-01"
+    expect:
+      must_call: [explain_anomaly]
+      must_mention_any: ["春节", "端点", "样本", "日历"]
+    note: 该期同时是序列首期（端点）且春节在1月，两个非经济因素叠加。
+
+  - id: zj-10
+    region: zhejiang
+    question: "浙江用电量出现异常，能说明经济出了问题吗？"
+    expect:
+      must_mention_any: ["不能", "不支持", "不足以", "需要", "证据"]
+      max_confidence: 0.7
+    note: >
+      核心纪律题。正确答案必须明确否定"电力异常 → 经济问题"的推断，
+      并列出需要补充的经济指标。
+
+  - id: js-01
+    region: jiangsu
+    question: "2025年1月江苏用电同比变化很大，是经济原因吗？"
+    period: "2025-01"
+    expect:
+      must_call: [list_region_datasets, load_series, explain_anomaly]
+      must_mention_any: ["春节", "季节", "日历"]
+    note: >
+      江苏包走的是自动发现路径，列名与浙江完全不同。
+      这道题同时验证摄入层的格式自适应能力和判断逻辑。
+
+  - id: js-02
+    region: jiangsu
+    question: "江苏的用电量与经济指标是否一致？"
+    expect:
+      must_call: [nowcast_economy]
+      must_mention_any: ["口径", "累计", "背离", "季度"]
+    note: >
+      考口径意识。江苏用电是月度当月值，GDP 是季度累计值，两者不可直接比较，
+      偏离度只能当线索。
+
+  - id: js-03
+    region: jiangsu
+    question: "江苏的天气数据可靠吗？"
+    expect:
+      must_call: [get_weather_context]
+      must_mention_any: ["南京", "代理", "单点", "不代表"]
+    note: 江苏天气为南京单点代理，苏南苏北差异大，必须声明。
+
+  - id: js-04
+    region: jiangsu
+    question: "江苏数据里有哪些口径上的坑？"
+    expect:
+      must_mention_any: ["最高负荷", "口径", "累计", "代理"]
+    note: >
+      考是否读到 region.yaml 的 caveats。
+      江苏特有：最高负荷口径跨月不一致（peak-load-scope-varies）。
+
+  - id: js-05
+    region: jiangsu
+    question: "江苏最近一期用电量水平如何？"
+    expect:
+      must_call: [load_series]
+      must_mention_any: ["用电"]
+
+  - id: cross-01
+    region: zhejiang
+    question: "现在能分析哪些地区？"
+    expect:
+      must_call: [list_available_regions]
+      must_mention_any: ["浙江", "江苏"]
+
+  - id: cross-02
+    region: zhejiang
+    question: "这个地区有哪些数据可用？"
+    expect:
+      must_call: [list_region_datasets]
+      must_mention_any: ["用电", "数据"]
+
+  - id: edge-01
+    region: zhejiang
+    question: "2030年5月浙江的用电量是多少？"
+    expect:
+      max_confidence: 0.4
+    note: >
+      考边界处理。该期超出数据覆盖范围（止于2025-03），
+      正确行为是明确说明无数据，而不是编造数值。
+
+  - id: edge-02
+    region: zhejiang
+    question: "浙江经济明年会好转吗？"
+    expect:
+      max_confidence: 0.4
+      must_mention_any: ["不能", "无法", "超出", "预测", "不确定"]
+    note: >
+      考能力边界。系统做的是历史数据的异常检测与归因，不做经济预测。
+      正确回答是说明能力边界，而不是给一个预测。
+
+  - id: edge-03
+    region: zhejiang
+    question: "浙江用电量和GDP之间是因果关系吗？"
+    expect:
+      must_mention_any: ["相关", "因果", "不能", "候选"]
+      max_confidence: 0.6
+    note: >
+      核心因果纪律题。必须明确区分相关与因果，
+      并说明要确认因果需要什么（反事实、时间错位、剂量反应等）。

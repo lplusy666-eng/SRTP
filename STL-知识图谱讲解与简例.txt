@@ -1,0 +1,1108 @@
+#### 你说：
+
+为初学者详细讲解STL分解算法和知识图谱，包括其具体内容，为什么使用它们，其代码实现，最后结合具体而简单的例子实际说明
+
+  
+
+#### ChatGPT 说：
+
+思考了 3m 44s
+
+# 一、先理解二者分别解决什么问题
+
+**STL 分解**和**知识图谱**不是同一类技术：
+
+技术
+
+处理对象
+
+主要回答的问题
+
+STL 分解
+
+按时间排列的数值，例如每天销量、每小时温度
+
+数据的长期趋势是什么？季节规律是什么？哪里出现异常？
+
+知识图谱
+
+实体及其关系，例如“门店—销售商品—发生促销”
+
+某个对象与哪些对象有关？异常发生在哪？可能与什么事件相关？
+
+可以把它们理解成：
+
+> STL 负责从数值中发现规律，知识图谱负责把规律与业务知识连接起来。
+
+* * *
+
+# 二、STL 分解算法
+
+## 2.1 STL 是什么
+
+STL 全称是：
+
+**Seasonal-Trend decomposition using LOESS**
+
+中文通常翻译为：
+
+**基于 LOESS 的季节—趋势分解方法**。
+
+它把一条时间序列拆成三个部分：
+
+Yt\=Tt+St+RtY\_t=T\_t+S\_t+R\_tYt​\=Tt​+St​+Rt​
+
+其中：
+
+符号
+
+名称
+
+含义
+
+YtY\_tYt​
+
+原始序列
+
+实际观测值
+
+TtT\_tTt​
+
+趋势 Trend
+
+长期上升、下降或缓慢变化
+
+StS\_tSt​
+
+季节项 Seasonal
+
+按固定周期重复的规律
+
+RtR\_tRt​
+
+残差 Remainder
+
+趋势和季节规律无法解释的部分
+
+STL 最早被设计为一种使用 LOESS 平滑器，将时间序列分解为趋势、季节和残差的过滤过程；`statsmodels` 的 STL 实现也返回这三个分量。[新墨西哥大学数学系+1](https://www.math.unm.edu/~lil/Stat581/STL.pdf)
+
+例如，一家冰淇淋店的销量可能是：
+
+-   生意逐年变好：趋势；
+    
+-   每年夏季销量较高：季节项；
+    
+-   某个月突然暴涨：残差或异常。
+    
+
+* * *
+
+## 2.2 一个直观例子
+
+假设某月冰淇淋销量是 90 箱。
+
+STL 可能将它解释为：
+
+90\=65+10+1590=65+10+1590\=65+10+15
+
+含义是：
+
+-   长期趋势带来的正常销量：65；
+    
+-   因为是夏季而增加的销量：10；
+    
+-   仍然无法解释的额外销量：15。
+    
+
+这里的 15 就是残差。如果大多数月份的残差只在 -3 到 3 之间，那么残差 15 就值得调查。
+
+* * *
+
+## 2.3 什么是 LOESS
+
+LOESS 可以理解为一种“局部拟合”。
+
+普通线性回归试图用一条直线拟合全部数据：
+
+y\=ax+by=ax+by\=ax+b
+
+但现实中的趋势通常不是直线。例如销量可能：
+
+-   前期增长较慢；
+    
+-   中期增长较快；
+    
+-   后期逐渐稳定。
+    
+
+LOESS 不强迫所有数据服从同一条直线，而是在每个时间点附近选择一小段数据，为距离较近的点分配更大的权重，然后拟合一个局部的低阶多项式。
+
+可以把它想象成：
+
+> 拿一把可以弯曲的尺子，沿着数据点缓慢移动，得到一条平滑曲线。
+
+`statsmodels` 将 STL 描述为使用局部估计散点平滑，即 LOESS，来获得趋势、季节和残差的平滑估计。[Statsmodels](https://www.statsmodels.org/stable/examples/notebooks/generated/stl_decomposition.html)
+
+* * *
+
+## 2.4 STL 的核心执行过程
+
+为了方便理解，假设我们分析的是月度销量，周期为 12。
+
+### 第一步：初始化趋势
+
+一开始可以暂时认为趋势为 0：
+
+Tt\=0T\_t=0Tt​\=0
+
+### 第二步：去除当前趋势
+
+计算：
+
+Yt−TtY\_t-T\_tYt​−Tt​
+
+第一次迭代时，这基本就是原始数据。
+
+### 第三步：估计季节规律
+
+把相同月份的数据放在一起：
+
+-   所有年份的 1 月；
+    
+-   所有年份的 2 月；
+    
+-   所有年份的 3 月；
+    
+-   ……
+    
+-   所有年份的 12 月。
+    
+
+然后分别使用 LOESS 平滑。
+
+例如：
+
+年份
+
+1 月销量
+
+2022
+
+42
+
+2023
+
+51
+
+2024
+
+59
+
+STL 会尝试提取“1 月通常比当年正常水平低多少”，而不是简单计算三个数字的平均值。
+
+### 第四步：低通滤波
+
+季节估计中有时会混入缓慢变化的趋势，因此还要通过低通滤波，从季节分量中移除长期变化。
+
+最终得到季节项：
+
+StS\_tSt​
+
+### 第五步：去除季节项
+
+计算季节调整后的序列：
+
+Yt−StY\_t-S\_tYt​−St​
+
+### 第六步：估计趋势
+
+对季节调整后的序列进行 LOESS 平滑，得到趋势：
+
+TtT\_tTt​
+
+### 第七步：反复迭代
+
+重新估计季节项和趋势项，直到二者比较稳定。
+
+### 第八步：计算残差
+
+Rt\=Yt−Tt−StR\_t=Y\_t-T\_t-S\_tRt​\=Yt​−Tt​−St​
+
+### 第九步：鲁棒迭代
+
+普通平滑可能会被极端值拉偏。
+
+例如，绝大多数销量在 50～70 之间，但某个月突然达到 150。开启鲁棒模式后，STL 会根据残差大小降低异常点的权重，再次估计趋势和季节项。`statsmodels` 中的 `robust=True` 就是启用这种对部分异常值更稳健的加权估计。[Statsmodels](https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html)
+
+* * *
+
+## 2.5 为什么使用 STL
+
+### 识别长期趋势
+
+例如：
+
+-   用户数量是否持续增长；
+    
+-   能耗是否逐年下降；
+    
+-   产品销量是否进入衰退期。
+    
+
+### 分析季节规律
+
+例如：
+
+-   周末流量更高；
+    
+-   每年春节销量变化；
+    
+-   每天早晚出现用电高峰。
+    
+
+### 进行季节调整
+
+原始销量下降，不一定说明经营变差。
+
+如果上个月是销售旺季，本月是淡季，那么下降可能只是季节规律。去掉季节项后，才更容易观察真实趋势：
+
+季节调整序列\=Yt−St\\text{季节调整序列}=Y\_t-S\_t季节调整序列\=Yt​−St​
+
+### 检测异常
+
+如果：
+
+∣Rt∣|R\_t|∣Rt​∣
+
+明显大于通常水平，那么这个时间点可能异常。
+
+### 辅助预测
+
+STL 本身主要负责分解，不是完整的预测模型。常见做法是：
+
+1.  STL 去除季节项；
+    
+2.  使用 ARIMA、指数平滑或机器学习模型预测趋势和非季节部分；
+    
+3.  把季节项加回预测结果。
+    
+
+* * *
+
+## 2.6 STL 的重要参数
+
+`statsmodels.tsa.seasonal.STL` 中常用参数如下。官方文档规定 `seasonal` 应为奇数且通常至少为 7，`trend` 和 `low_pass` 也使用奇数窗口；`period` 可以显式给出，也可以在带频率的 Pandas 序列上尝试自动判断。[Statsmodels](https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.STL.html)
+
+参数
+
+含义
+
+初学者建议
+
+`period`
+
+季节周期
+
+最重要，优先根据业务确定
+
+`seasonal`
+
+季节平滑窗口
+
+使用奇数，如 7、13、15
+
+`trend`
+
+趋势平滑窗口
+
+初学时可以不设置，让程序自动选择
+
+`low_pass`
+
+低通滤波窗口
+
+初学时使用默认值
+
+`robust`
+
+是否降低异常点影响
+
+异常检测时建议设为 `True`
+
+常见 `period`：
+
+数据频率
+
+重复规律
+
+period
+
+月度数据
+
+每年重复
+
+12
+
+日度数据
+
+每周重复
+
+7
+
+小时数据
+
+每天重复
+
+24
+
+15 分钟数据
+
+每天重复
+
+96
+
+季度数据
+
+每年重复
+
+4
+
+注意，`period` 表示“多少个观测点构成一个周期”，不是时间单位本身。
+
+* * *
+
+## 2.7 STL 的 Python 实例
+
+### 安装环境
+
+Bash
+
+```
+pip install numpy pandas matplotlib statsmodels
+```
+
+### 构造简单的月度销量数据
+
+下面人为构造三年数据：
+
+-   销量长期增长；
+    
+-   每年夏季销量较高；
+    
+-   2023 年 9 月人为加入一次异常增长。
+    
+
+Python
+
+运行
+
+```
+import numpy as npimport pandas as pdimport matplotlib.pyplot as pltfrom statsmodels.tsa.seasonal import STL# 1. 固定随机种子，使每次运行结果相同np.random.seed(42)# 2. 创建36个月的日期dates = pd.date_range(    start="2022-01-01",    periods=36,    freq="MS")# 3. 构造长期趋势：每个月增加0.8trend_true = 50 + 0.8 * np.arange(36)# 4. 构造一年12个月的季节规律seasonal_pattern = np.array([    -8, -6, -3, 2, 6, 11,    14, 12, 7, 2, -2, -7], dtype=float)# 让季节项的平均值为0seasonal_pattern -= seasonal_pattern.mean()# 重复3年seasonal_true = np.tile(seasonal_pattern, 3)# 5. 加入少量随机噪声noise = np.random.normal(    loc=0,    scale=1.2,    size=36)# 6. 合成销量sales = trend_true + seasonal_true + noise# 7. 人为制造异常：# 下标20对应2023年9月sales[20] += 20# 8. 转换成Pandas时间序列sales_series = pd.Series(    sales,    index=dates,    name="销量")print(sales_series.head())
+```
+
+### 执行 STL 分解
+
+Python
+
+运行
+
+```
+stl = STL(    sales_series,    period=12,      # 12个月构成一年    seasonal=13,    # 季节平滑窗口，必须是奇数    robust=True     # 减少异常值对趋势和季节项的影响)result = stl.fit()
+```
+
+STL 的结果主要保存在：
+
+Python
+
+运行
+
+```
+result.trend       # 趋势项result.seasonal    # 季节项result.resid       # 残差项
+```
+
+可以整理成表格：
+
+Python
+
+运行
+
+```
+decomposition = pd.DataFrame({    "原始销量": sales_series,    "趋势": result.trend,    "季节项": result.seasonal,    "残差": result.resid})print(decomposition.round(2).head(15))
+```
+
+检查分解是否满足：
+
+Yt\=Tt+St+RtY\_t=T\_t+S\_t+R\_tYt​\=Tt​+St​+Rt​
+
+Python
+
+运行
+
+```
+reconstructed = (    result.trend    + result.seasonal    + result.resid)max_error = (    sales_series - reconstructed).abs().max()print("最大重构误差：", max_error)
+```
+
+最大误差通常会非常接近 0。
+
+### 绘制分解结果
+
+Python
+
+运行
+
+```
+result.plot()plt.tight_layout()plt.show()
+```
+
+图中通常会看到四部分：
+
+1.  原始数据；
+    
+2.  趋势；
+    
+3.  季节项；
+    
+4.  残差。
+    
+
+* * *
+
+## 2.8 使用残差检测异常
+
+这里使用一个非常简单的教学规则：
+
+∣Rt−median⁡(R)∣\>3×std⁡(R)|R\_t-\\operatorname{median}(R)| >3\\times\\operatorname{std}(R)∣Rt​−median(R)∣\>3×std(R)
+
+代码如下：
+
+Python
+
+运行
+
+```
+residual = result.residthreshold = 3 * residual.std(ddof=0)is_anomaly = (    residual - residual.median()).abs() > thresholdanomaly_result = pd.DataFrame({    "销量": sales_series[is_anomaly],    "残差": residual[is_anomaly]})print(anomaly_result.round(2))
+```
+
+使用前面的随机种子，结果大致会检测出：
+
+```
+               销量     残差2023-09-01   92.43   22.26
+```
+
+解释如下：
+
+-   当月实际销量约为 92.43；
+    
+-   去掉长期趋势和正常季节规律后；
+    
+-   仍然有约 22.26 无法解释；
+    
+-   所以它被标记为异常。
+    
+
+画出异常点：
+
+Python
+
+运行
+
+```
+plt.figure(figsize=(10, 4))plt.plot(    sales_series.index,    sales_series.values,    label="月度销量")plt.scatter(    sales_series.index[is_anomaly],    sales_series[is_anomaly],    marker="x",    s=100,    label="异常点")plt.title("STL残差异常检测")plt.xlabel("日期")plt.ylabel("销量")plt.legend()plt.tight_layout()plt.show()
+```
+
+这里的“三倍标准差”只是入门演示。实际项目中还可以使用：
+
+-   MAD；
+    
+-   分位数阈值；
+    
+-   IQR；
+    
+-   Isolation Forest；
+    
+-   结合业务阈值的异常规则。
+    
+
+* * *
+
+## 2.9 STL 的局限
+
+### 必须知道季节周期
+
+如果错误地把月度数据的周期设成 7，分解结果通常没有明确业务意义。
+
+### 数据太短时效果有限
+
+只有 13 个月的数据，却要分析 12 个月的年度周期，信息通常不足。实践中最好拥有多个完整周期。
+
+### 一个 STL 主要处理一个季节周期
+
+小时数据可能同时具有：
+
+-   每日周期：24；
+    
+-   每周周期：168。
+    
+
+这时可以使用 MSTL，对多个季节周期进行分解；`statsmodels` 的 MSTL 支持同时指定多个 `periods`。[Statsmodels](https://www.statsmodels.org/stable/generated/statsmodels.tsa.seasonal.MSTL.html?utm_source=chatgpt.com)
+
+### 残差大不一定就是错误
+
+残差大可能代表：
+
+-   设备故障；
+    
+-   突发促销；
+    
+-   节假日；
+    
+-   极端天气；
+    
+-   数据录入错误；
+    
+-   真正的业务变化。
+    
+
+STL 只能说明“这个点不能被正常趋势和季节规律充分解释”，不能直接告诉我们原因。
+
+这正是知识图谱可以发挥作用的地方。
+
+* * *
+
+# 三、知识图谱
+
+## 3.1 知识图谱是什么
+
+知识图谱是一种使用“节点和关系”组织知识的方式。
+
+例如：
+
+```
+小明 --学习--> Python李老师 --教授--> PythonPython --属于--> 编程语言
+```
+
+这里：
+
+-   小明、李老师、Python、编程语言是实体；
+    
+-   学习、教授、属于是关系。
+    
+
+最基本的知识表示单位叫作**三元组**：
+
+(主语,谓语,宾语)(\\text{主语},\\text{谓语},\\text{宾语})(主语,谓语,宾语)
+
+例如：
+
+```
+（小明，学习，Python）（李老师，教授，Python）（Python，属于，编程语言）
+```
+
+在 RDF 标准中，图由“主语—谓语—宾语”三元组组成；主语和对象形成图中的节点，谓语表示二者之间的关系。[W3C](https://www.w3.org/TR/rdf11-concepts/)
+
+* * *
+
+## 3.2 知识图谱的具体组成
+
+### 实体 Entity
+
+现实世界中的对象。
+
+例如：
+
+-   人；
+    
+-   公司；
+    
+-   门店；
+    
+-   商品；
+    
+-   课程；
+    
+-   设备；
+    
+-   城市；
+    
+-   异常事件。
+    
+
+### 关系 Relation
+
+实体之间的联系。
+
+例如：
+
+```
+门店A --销售--> 冰淇淋促销活动 --发生于--> 门店A异常事件 --关联--> 促销活动
+```
+
+关系通常有方向：
+
+```
+李老师 --教授--> Python
+```
+
+不等同于：
+
+```
+Python --教授--> 李老师
+```
+
+### 属性 Attribute
+
+描述实体自身的信息。
+
+例如：
+
+```
+门店A --名称--> "中心店"门店A --开业日期--> "2022-01-01"异常事件 --残差值--> 22.26
+```
+
+属性值通常是文字、数字、日期或布尔值。
+
+### 类别 Class
+
+说明实体属于哪一类。
+
+例如：
+
+```
+小明 --类型--> 学生李老师 --类型--> 教师Python入门 --类型--> 课程
+```
+
+### 模式或本体 Schema/Ontology
+
+规定知识图谱中允许有哪些：
+
+-   类别；
+    
+-   关系；
+    
+-   属性；
+    
+-   约束；
+    
+-   层级。
+    
+
+例如：
+
+```
+学生 是一种 人教师 是一种 人教师 可以 教授 课程学生 可以 学习 课程
+```
+
+可以把本体理解成知识图谱的“设计图纸”，实例数据则是按照图纸建造出来的具体内容。
+
+* * *
+
+## 3.3 为什么使用知识图谱
+
+### 表达复杂关系
+
+传统表格适合整齐的数据：
+
+学生
+
+课程
+
+小明
+
+Python
+
+小红
+
+Java
+
+但随着关系增多，会出现很多表：
+
+-   学生表；
+    
+-   教师表；
+    
+-   课程表；
+    
+-   选课表；
+    
+-   教学表；
+    
+-   前置课程表。
+    
+
+知识图谱可以直接表示：
+
+```
+小明 --学习--> Python李老师 --教授--> PythonPython --前置课程--> 计算机基础
+```
+
+### 整合不同来源的数据
+
+例如：
+
+-   销售系统记录销量；
+    
+-   活动系统记录促销；
+    
+-   天气系统记录温度；
+    
+-   设备系统记录故障；
+    
+-   员工系统记录负责人。
+    
+
+知识图谱可以通过共同实体把这些数据连接起来。
+
+### 支持关系查询
+
+例如：
+
+> 查询所有参加了李老师所教授课程的学生。
+
+这类多跳关系查询非常适合图结构。
+
+### 支持解释
+
+推荐系统可能不仅返回：
+
+```
+推荐课程：数据分析
+```
+
+还可以给出关系路径：
+
+```
+小明学习了PythonPython是数据分析的前置课程因此推荐数据分析
+```
+
+### 支持一定程度的推理
+
+已知：
+
+```
+学生 是一种 人小明 是 学生
+```
+
+可以推导：
+
+```
+小明 是 人
+```
+
+不过，是否能自动推理取决于所使用的规则、本体和推理引擎。
+
+* * *
+
+# 四、使用 RDFLib 构建简单知识图谱
+
+## 4.1 为什么选择 RDFLib
+
+初学阶段可以使用 Python 的 RDFLib，因为它能直接创建 RDF 图、加入三元组、序列化数据并执行查询。
+
+RDFLib 的主要接口是 `Graph`，可以把它理解为一个三元组集合；使用 `Graph.add()` 可以加入一个由三个 RDF 节点组成的三元组。[rdflib.readthedocs.io+1](https://rdflib.readthedocs.io/en/stable/intro_to_creating_rdf/)
+
+安装：
+
+Bash
+
+```
+pip install rdflib
+```
+
+* * *
+
+## 4.2 创建“学生—教师—课程”知识图谱
+
+Python
+
+运行
+
+```
+from rdflib import Graph, Namespace, RDF, RDFS, Literal# 1. 创建一个空知识图谱graph = Graph()# 2. 创建自己的命名空间EX = Namespace("http://example.org/")# 3. 给命名空间设置简写graph.bind("ex", EX)# -------------------------# 定义类别# -------------------------graph.add((    EX.Student,    RDF.type,    RDFS.Class))graph.add((    EX.Teacher,    RDF.type,    RDFS.Class))graph.add((    EX.Course,    RDF.type,    RDFS.Class))# -------------------------# 定义实体及其类型# -------------------------graph.add((    EX.Xiaoming,    RDF.type,    EX.Student))graph.add((    EX.TeacherLi,    RDF.type,    EX.Teacher))graph.add((    EX.PythonCourse,    RDF.type,    EX.Course))# -------------------------# 添加实体属性# -------------------------graph.add((    EX.Xiaoming,    EX.name,    Literal("小明", lang="zh")))graph.add((    EX.TeacherLi,    EX.name,    Literal("李老师", lang="zh")))graph.add((    EX.PythonCourse,    EX.name,    Literal("Python入门", lang="zh")))# -------------------------# 添加实体关系# -------------------------graph.add((    EX.Xiaoming,    EX.learns,    EX.PythonCourse))graph.add((    EX.TeacherLi,    EX.teaches,    EX.PythonCourse))print("三元组数量：", len(graph))
+```
+
+图中的核心关系是：
+
+```
+小明 --学习--> Python入门李老师 --教授--> Python入门
+```
+
+打印全部三元组：
+
+Python
+
+运行
+
+```
+for subject, predicate, obj in graph:    print(subject, predicate, obj)
+```
+
+* * *
+
+## 4.3 将知识图谱输出为 Turtle 格式
+
+Turtle 是一种便于阅读的 RDF 文本格式。
+
+Python
+
+运行
+
+```
+turtle_text = graph.serialize(    format="turtle")print(turtle_text)
+```
+
+输出大致如下：
+
+turtle
+
+```
+@prefix ex: <http://example.org/> .ex:Xiaoming a ex:Student ;    ex:learns ex:PythonCourse ;    ex:name "小明"@zh .ex:TeacherLi a ex:Teacher ;    ex:name "李老师"@zh ;    ex:teaches ex:PythonCourse .ex:PythonCourse a ex:Course ;    ex:name "Python入门"@zh .
+```
+
+其中：
+
+turtle
+
+```
+a ex:Student
+```
+
+等价于：
+
+```
+类型是 Student
+```
+
+* * *
+
+## 4.4 使用 SPARQL 查询
+
+SPARQL 是 RDF 图常用的查询语言。
+
+问题：
+
+> 查询哪个学生正在学习哪门课程，以及课程由谁教授。
+
+Python
+
+运行
+
+```
+query = """PREFIX ex: <http://example.org/>SELECT ?studentName ?courseName ?teacherNameWHERE {    ?student a ex:Student ;             ex:name ?studentName ;             ex:learns ?course .    ?course ex:name ?courseName .    ?teacher a ex:Teacher ;             ex:name ?teacherName ;             ex:teaches ?course .}"""results = graph.query(query)for row in results:    print(        f"学生：{row.studentName}，"        f"课程：{row.courseName}，"        f"教师：{row.teacherName}"    )
+```
+
+输出：
+
+```
+学生：小明，课程：Python入门，教师：李老师
+```
+
+注意，这个答案并没有直接存储成一句完整的话。
+
+知识图谱只存储了：
+
+```
+小明学习Python入门李老师教授Python入门
+```
+
+查询程序通过共同的“Python入门”节点，把学生和教师连接了起来。
+
+* * *
+
+# 五、把 STL 与知识图谱结合起来
+
+下面继续使用前面的月度销量案例。
+
+## 5.1 业务背景
+
+假设 STL 检测到：
+
+```
+2023年9月，A门店销量异常升高
+```
+
+之后，业务人员查询活动系统，发现：
+
+```
+2023年9月，A门店举行了国庆预热促销
+```
+
+STL 可以告诉我们：
+
+```
+2023年9月的残差很大
+```
+
+但是 STL 本身不知道：
+
+-   哪家门店；
+    
+-   销售什么商品；
+    
+-   当月有什么活动；
+    
+-   谁负责活动；
+    
+-   是否发生设备或数据问题。
+    
+
+知识图谱可以保存这些上下文。
+
+* * *
+
+## 5.2 将 STL 异常结果写入知识图谱
+
+以下代码接着使用前面已经生成的变量：
+
+-   `sales_series`；
+    
+-   `result`；
+    
+-   `is_anomaly`。
+    
+
+Python
+
+运行
+
+```
+from rdflib import Graph, Namespace, RDF, Literalfrom rdflib.namespace import XSD# 创建业务知识图谱kg = Graph()BIZ = Namespace(    "http://example.org/business/")kg.bind("biz", BIZ)# -------------------------# 创建门店实体# -------------------------store = BIZ.StoreAkg.add((    store,    RDF.type,    BIZ.Store))kg.add((    store,    BIZ.name,    Literal("A门店", lang="zh")))# -------------------------# 创建商品实体# -------------------------product = BIZ.IceCreamkg.add((    product,    RDF.type,    BIZ.Product))kg.add((    product,    BIZ.name,    Literal("冰淇淋", lang="zh")))kg.add((    store,    BIZ.sells,    product))# -------------------------# 创建促销活动# 假设这是业务人员补充的信息# -------------------------promotion = BIZ.Promotion202309kg.add((    promotion,    RDF.type,    BIZ.Promotion))kg.add((    promotion,    BIZ.name,    Literal("国庆预热促销", lang="zh")))kg.add((    promotion,    BIZ.heldAt,    store))# -------------------------# 将STL检测到的异常写入知识图谱# -------------------------for date, anomaly_flag in is_anomaly.items():    if not anomaly_flag:        continue    event_name = (        f"SalesAnomaly_{date:%Y_%m}"    )    event = BIZ[event_name]    # 异常类型    kg.add((        event,        RDF.type,        BIZ.SalesAnomaly    ))    # 异常发生于哪个门店    kg.add((        event,        BIZ.occurredAt,        store    ))    # 异常涉及哪个商品    kg.add((        event,        BIZ.involvesProduct,        product    ))    # 异常日期    kg.add((        event,        BIZ.date,        Literal(            date.date(),            datatype=XSD.date        )    ))    # 实际销量    kg.add((        event,        BIZ.observedSales,        Literal(            float(sales_series.loc[date]),            datatype=XSD.double        )    ))    # STL残差    kg.add((        event,        BIZ.stlResidual,        Literal(            float(result.resid.loc[date]),            datatype=XSD.double        )    ))    # 关联到促销活动    # 注意：这是业务信息，不是STL自动推断的    kg.add((        event,        BIZ.relatedTo,        promotion    ))
+```
+
+现在图中的知识关系类似于：
+
+```
+销量异常2023-09 --发生于--> A门店销量异常2023-09 --涉及商品--> 冰淇淋销量异常2023-09 --日期--> 2023-09-01销量异常2023-09 --实际销量--> 92.43销量异常2023-09 --STL残差--> 22.26销量异常2023-09 --关联--> 国庆预热促销国庆预热促销 --举行于--> A门店
+```
+
+* * *
+
+## 5.3 查询异常及其关联事件
+
+Python
+
+运行
+
+```
+query = """PREFIX biz:    <http://example.org/business/>SELECT    ?storeName    ?productName    ?date    ?sales    ?residual    ?promotionNameWHERE {    ?event a biz:SalesAnomaly ;           biz:occurredAt ?store ;           biz:involvesProduct ?product ;           biz:date ?date ;           biz:observedSales ?sales ;           biz:stlResidual ?residual ;           biz:relatedTo ?promotion .    ?store biz:name ?storeName .    ?product biz:name ?productName .    ?promotion biz:name ?promotionName .}"""for row in kg.query(query):    print("门店：", row.storeName)    print("商品：", row.productName)    print("日期：", row.date)    print("实际销量：", round(float(row.sales), 2))    print("STL残差：", round(float(row.residual), 2))    print("关联活动：", row.promotionName)
+```
+
+输出大致为：
+
+```
+门店： A门店商品： 冰淇淋日期： 2023-09-01实际销量： 92.43STL残差： 22.26关联活动： 国庆预热促销
+```
+
+* * *
+
+# 六、这个结合案例说明了什么
+
+## STL 完成了数值分析
+
+STL 从销量序列中发现：
+
+```
+2023年9月不能被正常趋势和季节规律充分解释。
+```
+
+计算过程可以概括为：
+
+残差\=实际销量−趋势−季节项\\text{残差} = \\text{实际销量} -\\text{趋势} -\\text{季节项}残差\=实际销量−趋势−季节项
+
+## 知识图谱完成了语义连接
+
+知识图谱进一步组织了：
+
+```
+异常发生在哪家门店异常涉及什么商品异常发生在什么日期当月有哪些业务活动活动与门店是什么关系
+```
+
+## 但要区分“关联”和“因果”
+
+知识图谱中记录：
+
+```
+销量异常 --关联--> 促销活动
+```
+
+不等于严格证明：
+
+```
+促销活动 --导致--> 销量异常
+```
+
+要确认因果关系，还可能需要：
+
+-   对照实验；
+    
+-   历史促销数据；
+    
+-   同类门店对比；
+    
+-   因果推断；
+    
+-   业务人员验证。
+    
+
+所以更严谨的关系名称是：
+
+```
+relatedTosuspectedCauseoccurredDuring
+```
+
+而不是未经验证就使用：
+
+```
+causedBy
+```
+
+* * *
+
+# 七、两种技术的完整应用流程
+
+一个实际的销售异常分析系统，可以按照以下流程工作：
+
+```
+原始销量数据      ↓检查时间频率和缺失值      ↓确定季节周期      ↓使用STL分解      ↓得到趋势、季节项和残差      ↓根据残差检测异常      ↓把异常转换为“异常事件”实体      ↓连接门店、商品、促销、天气、设备等知识      ↓使用图查询寻找相关事件      ↓由业务人员或因果模型确认原因
+```
+
+* * *
+
+# 八、最需要记住的内容
+
+STL 的核心公式是：
+
+Yt\=Tt+St+RtY\_t=T\_t+S\_t+R\_tYt​\=Tt​+St​+Rt​
+
+它分别回答：
+
+```
+趋势：长期在发生什么变化？季节项：什么规律会周期性重复？残差：还有什么无法解释？
+```
+
+知识图谱的核心结构是：
+
+(主语,谓语,宾语)(\\text{主语},\\text{谓语},\\text{宾语})(主语,谓语,宾语)
+
+它分别表示：
+
+```
+实体A --关系--> 实体B
+```
+
+二者结合后：
+
+```
+STL发现异常知识图谱组织异常的业务背景
+```
+
+因此可以概括为：
+
+> STL 擅长从时间序列中回答“什么时候不正常”，知识图谱擅长通过实体关系帮助回答“哪里不正常、涉及什么，以及可能与什么有关”。
+
+来源
+
+  
+
+深入
+
+ChatGPT 也可能会犯错。OpenAI 不会使用“pro4|”工作空间数据来训练其模型。

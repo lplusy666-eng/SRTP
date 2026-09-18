@@ -1,0 +1,69 @@
+project:
+  timezone: Asia/Shanghai
+  region: 杭州示范区
+  latitude: 30.2741
+  longitude: 120.1551
+  seed: 42
+paths:
+  raw_dir: data/research/raw
+  processed_dir: data/research/processed
+  model_dir: artifacts/research/models
+  output_dir: artifacts/research/outputs
+  report_dir: artifacts/research/reports
+  db_path: artifacts/research/power_econ.db
+  knowledge_dir: knowledge
+data:
+  mode: demo
+  start: "2021-01-01"
+  end: "2025-01-01"
+  frequency: 1h
+  inject_demo_anomalies: true
+  weather: {provider: synthetic}
+  macro: {provider: synthetic, release_lag_months: 1}
+forecaster:
+  lookback: 336
+  horizon: 24
+  seasonal_period: 168
+  hidden_dim: 64
+  num_layers: 2
+  dropout: 0.15
+  batch_size: 256
+  epochs: 30
+  learning_rate: 0.0008
+  weight_decay: 0.00001
+  patience: 6
+  quantiles: [0.1, 0.5, 0.9]
+  disentangle_weight: 0.03
+  train_ratio: 0.70
+  val_ratio: 0.15
+  device: auto
+  num_workers: 0
+  gradient_clip_norm: 1.0
+vae:
+  enabled: true
+  sequence_length: 72
+  hidden_dim: 48
+  latent_dim: 12
+  batch_size: 256
+  epochs: 15
+  learning_rate: 0.001
+  beta: 0.001
+  patience: 5
+anomaly:
+  forecast_weight: 0.65
+  vae_weight: 0.35
+  threshold_quantile: 0.98
+  min_separation_hours: 6
+  max_events: 500
+nowcast:
+  enabled: true
+  target: industrial_yoy
+  min_months: 24
+  test_months: 12
+  alpha: 3.0
+llm:
+  provider: template
+  model: gpt-5.6-luna
+  reasoning_effort: low
+  max_output_tokens: 4000
+api: {host: 0.0.0.0, port: 8000, reload: false}

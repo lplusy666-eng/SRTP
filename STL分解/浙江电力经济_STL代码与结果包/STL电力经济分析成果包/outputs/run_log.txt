@@ -1,0 +1,10 @@
+{
+  "status": "success",
+  "output_dir": "/mnt/data/STL电力经济分析成果包/outputs",
+  "electricity_records": 51,
+  "gdp_records": 312,
+  "electricity_high_anomalies": 7,
+  "gdp_high_anomalies": 22,
+  "kg_nodes": 647,
+  "kg_edges": 1235
+}

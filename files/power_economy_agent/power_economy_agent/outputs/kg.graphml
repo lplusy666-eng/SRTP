@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="edge" attr.name="type" attr.type="string"/>
+<key id="d0" for="edge" attr.name="relation" attr.type="string"/>
+<graph edgedefault="directed"><node id="制造业"/>
+<node id="工业用电"/>
+<node id="房地产"/>
+<node id="建材冶金用电"/>
+<node id="居民消费"/>
+<node id="商业与居民用电"/>
+<node id="出口"/>
+<node id="外向型制造用电"/>
+<node id="新能源发电"/>
+<node id="净负荷波动"/>
+<node id="高温天气"/>
+<node id="制冷负荷骤升"/>
+<node id="寒潮"/>
+<node id="采暖负荷骤升"/>
+<node id="春节假期"/>
+<node id="工业用电断崖式下降"/>
+<node id="国庆假期"/>
+<node id="用电小幅回落"/>
+<node id="电价调整"/>
+<node id="用电时段结构变化"/>
+<node id="限电限产政策"/>
+<node id="工业用电阶段性下降"/>
+<node id="持续负偏离_非节假日"/>
+<node id="制造业订单下滑/需求走弱"/>
+<node id="行业限产或环保督察"/>
+<node id="持续正偏离_非节假日"/>
+<node id="重大项目投产/产能扩张"/>
+<node id="促消费政策/经济回暖"/>
+<node id="春节后复工偏慢"/>
+<node id="外需疲弱/企业信心不足"/>
+<node id="高频剧烈波动"/>
+<node id="新能源大发或极端天气"/>
+<node id="PMI下行"/>
+<node id="固定资产投资上升"/>
+<node id="社会消费品零售总额回升"/>
+<node id="行业开工率下降"/>
+<edge source="制造业" target="工业用电" id="0">
+  <data key="d0">affects</data>
+  <data key="d1">Sector-Load</data>
+</edge>
+<edge source="房地产" target="建材冶金用电" id="0">
+  <data key="d0">affects</data>
+  <data key="d1">Sector-Load</data>
+</edge>
+<edge source="居民消费" target="商业与居民用电" id="0">
+  <data key="d0">affects</data>
+  <data key="d1">Sector-Load</data>
+</edge>
+<edge source="出口" target="外向型制造用电" id="0">
+  <data key="d0">affects</data>
+  <data key="d1">Sector-Load</data>
+</edge>
+<edge source="新能源发电" target="净负荷波动" id="0">
+  <data key="d0">affects</data>
+  <data key="d1">Sector-Load</data>
+</edge>
+<edge source="高温天气" target="制冷负荷骤升" id="0">
+  <data key="d0">indicates</data>
+  <data key="d1">Disturbance-Sig</data>
+</edge>
+<edge source="寒潮" target="采暖负荷骤升" id="0">
+  <data key="d0">indicates</data>
+  <data key="d1">Disturbance-Sig</data>
+</edge>
+<edge source="春节假期" target="工业用电断崖式下降" id="0">
+  <data key="d0">indicates</data>
+  <data key="d1">Disturbance-Sig</data>
+</edge>
+<edge source="国庆假期" target="用电小幅回落" id="0">
+  <data key="d0">indicates</data>
+  <data key="d1">Disturbance-Sig</data>
+</edge>
+<edge source="电价调整" target="用电时段结构变化" id="0">
+  <data key="d0">indicates</data>
+  <data key="d1">Disturbance-Sig</data>
+</edge>
+<edge source="限电限产政策" target="工业用电阶段性下降" id="0">
+  <data key="d0">indicates</data>
+  <data key="d1">Disturbance-Sig</data>
+</edge>
+<edge source="持续负偏离_非节假日" target="制造业订单下滑/需求走弱" id="0">
+  <data key="d0">explained_by</data>
+  <data key="d1">Sig-Cause</data>
+</edge>
+<edge source="持续负偏离_非节假日" target="行业限产或环保督察" id="0">
+  <data key="d0">explained_by</data>
+  <data key="d1">Sig-Cause</data>
+</edge>
+<edge source="制造业订单下滑/需求走弱" target="PMI下行" id="0">
+  <data key="d0">corroborated_by</data>
+  <data key="d1">Cause-Indicator</data>
+</edge>
+<edge source="行业限产或环保督察" target="行业开工率下降" id="0">
+  <data key="d0">corroborated_by</data>
+  <data key="d1">Cause-Indicator</data>
+</edge>
+<edge source="持续正偏离_非节假日" target="重大项目投产/产能扩张" id="0">
+  <data key="d0">explained_by</data>
+  <data key="d1">Sig-Cause</data>
+</edge>
+<edge source="持续正偏离_非节假日" target="促消费政策/经济回暖" id="0">
+  <data key="d0">explained_by</data>
+  <data key="d1">Sig-Cause</data>
+</edge>
+<edge source="重大项目投产/产能扩张" target="固定资产投资上升" id="0">
+  <data key="d0">corroborated_by</data>
+  <data key="d1">Cause-Indicator</data>
+</edge>
+<edge source="促消费政策/经济回暖" target="社会消费品零售总额回升" id="0">
+  <data key="d0">corroborated_by</data>
+  <data key="d1">Cause-Indicator</data>
+</edge>
+<edge source="春节后复工偏慢" target="外需疲弱/企业信心不足" id="0">
+  <data key="d0">explained_by</data>
+  <data key="d1">Sig-Cause</data>
+</edge>
+<edge source="高频剧烈波动" target="新能源大发或极端天气" id="0">
+  <data key="d0">explained_by</data>
+  <data key="d1">Sig-Cause</data>
+</edge>
+</graph></graphml>

@@ -1,0 +1,150 @@
+{
+  "feature_columns": [
+    "load_mw",
+    "load_trend",
+    "load_daily",
+    "load_weekly",
+    "load_residual",
+    "load_diff_1",
+    "load_rolling_mean_24",
+    "load_rolling_std_24",
+    "load_rolling_mean_168",
+    "load_rolling_std_168",
+    "load_residual_mean_24",
+    "load_residual_mean_168",
+    "load_factor_24",
+    "temperature_2m",
+    "relative_humidity_2m",
+    "precipitation",
+    "wind_speed_10m",
+    "cdd",
+    "hdd",
+    "temp_anomaly",
+    "apparent_stress",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "month_sin",
+    "month_cos",
+    "is_weekend",
+    "is_holiday",
+    "is_business_hour",
+    "industrial_yoy_published",
+    "pmi_published",
+    "retail_yoy_published",
+    "power_consumption_yoy_published",
+    "electricity_price_index_published",
+    "renewable_share_published",
+    "policy_event",
+    "sensor_quality",
+    "missing_fraction"
+  ],
+  "groups": {
+    "load": [
+      "load_mw",
+      "load_trend",
+      "load_daily",
+      "load_weekly",
+      "load_residual",
+      "load_diff_1",
+      "load_rolling_mean_24",
+      "load_rolling_std_24",
+      "load_rolling_mean_168",
+      "load_rolling_std_168",
+      "load_residual_mean_24",
+      "load_residual_mean_168",
+      "load_factor_24"
+    ],
+    "weather": [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "precipitation",
+      "wind_speed_10m",
+      "cdd",
+      "hdd",
+      "temp_anomaly",
+      "apparent_stress"
+    ],
+    "calendar": [
+      "hour_sin",
+      "hour_cos",
+      "dow_sin",
+      "dow_cos",
+      "month_sin",
+      "month_cos",
+      "is_weekend",
+      "is_holiday",
+      "is_business_hour"
+    ],
+    "macro": [
+      "industrial_yoy_published",
+      "pmi_published",
+      "retail_yoy_published",
+      "power_consumption_yoy_published",
+      "electricity_price_index_published",
+      "renewable_share_published"
+    ],
+    "event": [
+      "policy_event",
+      "sensor_quality",
+      "missing_fraction"
+    ]
+  },
+  "group_indices": {
+    "load": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "weather": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20
+    ],
+    "calendar": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "macro": [
+      30,
+      31,
+      32,
+      33,
+      34,
+      35
+    ],
+    "event": [
+      36,
+      37,
+      38
+    ]
+  },
+  "label_columns": [
+    "anomaly_label",
+    "anomaly_cause"
+  ],
+  "macro_release_lag_months": 1
+}

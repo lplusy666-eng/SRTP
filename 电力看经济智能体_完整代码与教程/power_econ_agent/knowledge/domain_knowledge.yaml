@@ -1,0 +1,132 @@
+version: 1
+nodes:
+  - {id: sensor_fault, label: 计量/通信异常, type: cause}
+  - {id: extreme_heat, label: 极端高温, type: cause}
+  - {id: cold_wave, label: 寒潮采暖负荷, type: cause}
+  - {id: holiday_effect, label: 节假日效应, type: cause}
+  - {id: demand_response, label: 需求响应或限电策略, type: cause}
+  - {id: industrial_slowdown, label: 工业活动走弱, type: cause}
+  - {id: economic_expansion, label: 经济活动增强, type: cause}
+  - {id: renewable_volatility, label: 新能源出力扰动, type: cause}
+  - {id: weather, label: 气象因素, type: factor}
+  - {id: calendar, label: 日历因素, type: factor}
+  - {id: policy, label: 政策与事件, type: factor}
+  - {id: data_quality, label: 数据质量, type: factor}
+  - {id: production, label: 企业生产, type: economic_signal}
+  - {id: consumption, label: 居民与商业消费, type: economic_signal}
+  - {id: grid_operation, label: 电网运行, type: operational_signal}
+  - {id: human_review, label: 人工复核, type: action}
+edges:
+  - {source: sensor_fault, target: data_quality, relation: caused_by}
+  - {source: sensor_fault, target: human_review, relation: requires}
+  - {source: extreme_heat, target: weather, relation: caused_by}
+  - {source: extreme_heat, target: consumption, relation: affects}
+  - {source: cold_wave, target: weather, relation: caused_by}
+  - {source: cold_wave, target: consumption, relation: affects}
+  - {source: holiday_effect, target: calendar, relation: caused_by}
+  - {source: holiday_effect, target: production, relation: affects}
+  - {source: demand_response, target: policy, relation: caused_by}
+  - {source: demand_response, target: grid_operation, relation: affects}
+  - {source: industrial_slowdown, target: production, relation: indicates}
+  - {source: economic_expansion, target: production, relation: indicates}
+  - {source: renewable_volatility, target: grid_operation, relation: affects}
+
+rules:
+  - id: sensor_fault
+    label: 计量/通信异常
+    category: data
+    base_score: 0.10
+    min_score: 0.35
+    related_nodes: [data_quality, human_review]
+    conditions:
+      - {feature: sensor_quality, op: le, value: 0.5, weight: 0.60, evidence: "传感器质量分数仅为 {actual:.2f}"}
+      - {feature: abs_load_diff_1, op: ge, value: 220, weight: 0.28, evidence: "相邻时点负荷突变达到 {actual:.1f} MW"}
+      - {feature: vae_score, op: ge, value: 2.5, weight: 0.20, evidence: "多变量重构异常分数为 {actual:.2f}"}
+      - {feature: missing_fraction, op: ge, value: 0.15, weight: 0.25, evidence: "关键字段缺失比例为 {actual:.1%}"}
+
+  - id: extreme_heat
+    label: 极端高温空调负荷
+    category: weather
+    base_score: 0.08
+    min_score: 0.38
+    related_nodes: [weather, consumption]
+    conditions:
+      - {feature: temperature_2m, op: ge, value: 33, weight: 0.36, evidence: "气温达到 {actual:.1f}℃"}
+      - {feature: temp_anomaly, op: ge, value: 4.5, weight: 0.28, evidence: "相对历史气候基线偏高 {actual:.1f}℃"}
+      - {feature: residual_mw, op: ge, value: 45, weight: 0.18, evidence: "实测负荷高于模型期望 {actual:.1f} MW"}
+      - {feature: importance_weather, op: ge, value: 0.22, weight: 0.18, evidence: "天气特征解释占比为 {actual:.1%}"}
+
+  - id: cold_wave
+    label: 寒潮采暖负荷
+    category: weather
+    base_score: 0.08
+    min_score: 0.38
+    related_nodes: [weather, consumption]
+    conditions:
+      - {feature: temperature_2m, op: le, value: 3, weight: 0.35, evidence: "气温降至 {actual:.1f}℃"}
+      - {feature: temp_anomaly, op: le, value: -4, weight: 0.25, evidence: "相对气候基线偏低 {actual:.1f}℃"}
+      - {feature: residual_mw, op: ge, value: 35, weight: 0.18, evidence: "负荷较期望增加 {actual:.1f} MW"}
+      - {feature: importance_weather, op: ge, value: 0.22, weight: 0.18, evidence: "天气特征解释占比为 {actual:.1%}"}
+
+  - id: holiday_effect
+    label: 节假日与调休效应
+    category: calendar
+    base_score: 0.08
+    min_score: 0.34
+    related_nodes: [calendar, production]
+    conditions:
+      - {feature: is_holiday, op: eq, value: 1, weight: 0.45, evidence: "该时点位于节假日/休息日"}
+      - {feature: residual_mw, op: le, value: -35, weight: 0.22, evidence: "负荷低于模型期望 {actual:.1f} MW"}
+      - {feature: importance_calendar, op: ge, value: 0.18, weight: 0.18, evidence: "日历特征解释占比为 {actual:.1%}"}
+      - {feature: is_business_hour, op: eq, value: 1, weight: 0.10, evidence: "下降发生在生产经营时段"}
+
+  - id: demand_response
+    label: 需求响应、错峰或政策事件
+    category: policy
+    base_score: 0.10
+    min_score: 0.35
+    related_nodes: [policy, grid_operation]
+    conditions:
+      - {feature: policy_event, op: eq, value: 1, weight: 0.55, evidence: "事件日历标记了需求响应/政策事件"}
+      - {feature: residual_mw, op: le, value: -30, weight: 0.18, evidence: "负荷低于期望 {actual:.1f} MW"}
+      - {feature: importance_event, op: ge, value: 0.15, weight: 0.20, evidence: "事件与数据质量通道解释占比为 {actual:.1%}"}
+
+  - id: industrial_slowdown
+    label: 工业活动走弱
+    category: economic
+    base_score: 0.06
+    min_score: 0.42
+    related_nodes: [production]
+    conditions:
+      - {feature: residual_mw, op: le, value: -55, weight: 0.22, evidence: "实测负荷低于期望 {actual:.1f} MW"}
+      - {feature: load_residual_mean_24, op: le, value: -22, weight: 0.24, evidence: "过去24小时持续偏低，均值为 {actual:.1f} MW"}
+      - {feature: is_business_hour, op: eq, value: 1, weight: 0.18, evidence: "偏离集中于生产经营时段"}
+      - {feature: pmi_published, op: le, value: 50.2, weight: 0.13, evidence: "已发布制造业PMI为 {actual:.1f}"}
+      - {feature: industrial_yoy_published, op: le, value: 5.0, weight: 0.13, evidence: "已发布工业增加值同比为 {actual:.1f}%"}
+      - {feature: weather_normal, op: eq, value: 1, weight: 0.12, evidence: "气温处于非极端区间，天气解释不足"}
+
+  - id: economic_expansion
+    label: 经济活动增强
+    category: economic
+    base_score: 0.06
+    min_score: 0.42
+    related_nodes: [production, consumption]
+    conditions:
+      - {feature: residual_mw, op: ge, value: 55, weight: 0.22, evidence: "实测负荷高于期望 {actual:.1f} MW"}
+      - {feature: load_residual_mean_24, op: ge, value: 22, weight: 0.24, evidence: "过去24小时持续偏高，均值为 {actual:.1f} MW"}
+      - {feature: is_business_hour, op: eq, value: 1, weight: 0.18, evidence: "偏离集中于生产经营时段"}
+      - {feature: pmi_published, op: ge, value: 50.6, weight: 0.14, evidence: "已发布制造业PMI为 {actual:.1f}"}
+      - {feature: industrial_yoy_published, op: ge, value: 5.5, weight: 0.12, evidence: "已发布工业增加值同比为 {actual:.1f}%"}
+      - {feature: weather_normal, op: eq, value: 1, weight: 0.12, evidence: "气温处于非极端区间"}
+
+  - id: renewable_volatility
+    label: 新能源出力与净负荷扰动
+    category: supply
+    base_score: 0.06
+    min_score: 0.36
+    related_nodes: [grid_operation]
+    conditions:
+      - {feature: renewable_share_published, op: ge, value: 0.23, weight: 0.20, evidence: "新能源占比代理达到 {actual:.1%}"}
+      - {feature: wind_speed_10m, op: ge, value: 7, weight: 0.22, evidence: "风速达到 {actual:.1f} m/s"}
+      - {feature: importance_weather, op: ge, value: 0.20, weight: 0.16, evidence: "天气通道解释占比为 {actual:.1%}"}
+      - {feature: abs_residual_mw, op: ge, value: 50, weight: 0.18, evidence: "净负荷偏离幅度为 {actual:.1f} MW"}

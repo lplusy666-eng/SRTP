@@ -1,0 +1,25 @@
+@prefix kg: <https://example.org/zju-srtp/kg/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+kg:Project a rdfs:Class .
+kg:Region a rdfs:Class .
+kg:Domain a rdfs:Class .
+kg:Indicator a rdfs:Class .
+kg:Feature a rdfs:Class .
+kg:Period a rdfs:Class .
+kg:Event a rdfs:Class .
+kg:Observation a rdfs:Class .
+kg:DataSource a rdfs:Class .
+
+kg:measures a rdf:Property ; rdfs:domain kg:Observation ; rdfs:range kg:Indicator .
+kg:observedIn a rdf:Property ; rdfs:domain kg:Observation ; rdfs:range kg:Region .
+kg:atTime a rdf:Property ; rdfs:domain kg:Observation ; rdfs:range kg:Period .
+kg:fromSource a rdf:Property ; rdfs:domain kg:Observation ; rdfs:range kg:DataSource .
+kg:affects a rdf:Property .
+kg:proxiesFor a rdf:Property .
+kg:derivesFeature a rdf:Property .
+kg:value a rdf:Property ; rdfs:range xsd:decimal .
+kg:unit a rdf:Property ; rdfs:range xsd:string .
+kg:qualityFlag a rdf:Property ; rdfs:range xsd:string .

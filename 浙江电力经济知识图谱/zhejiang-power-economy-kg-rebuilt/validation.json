@@ -1,0 +1,14 @@
+{
+  "electricityRows": 51,
+  "industryRows": 348,
+  "weatherMonths": 60,
+  "calendarDays": 1826,
+  "calendarMonths": 60,
+  "nodes": 241,
+  "observations": 1179,
+  "relationships": 4775,
+  "duplicateNodeIds": [],
+  "duplicateObservationIds": [],
+  "missingRelationEndpoints": [],
+  "weatherCompleteness": []
+}

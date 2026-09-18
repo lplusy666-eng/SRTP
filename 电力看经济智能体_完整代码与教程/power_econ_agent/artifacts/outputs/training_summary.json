@@ -1,0 +1,52 @@
+{
+  "forecaster_metrics": {
+    "mae": 41.04558280048295,
+    "rmse": 59.35817882537416,
+    "mape": 3.1378138866000604,
+    "interval_80_coverage": 0.7696116008687875,
+    "interval_80_mean_width_mw": 110.90429405618748,
+    "one_step_mae": 39.82228732275844,
+    "one_step_rmse": 57.46767781391637,
+    "seasonal_naive_mae": 44.297520636781144,
+    "mae_improvement_vs_seasonal_pct": 7.3411283285187885,
+    "best_validation_loss": 0.24058984913397402
+  },
+  "anomaly_metrics": {
+    "precision": 0.3048780487804878,
+    "recall": 0.9433962264150944,
+    "f1": 0.4608294930875576,
+    "predicted_anomaly_rate": 0.06231003039513678,
+    "true_anomaly_rate": 0.02013677811550152,
+    "evaluated_points": 2632.0,
+    "roc_auc": 0.9847608038803982,
+    "average_precision": 0.7210573739467152
+  },
+  "nowcast_metrics": {
+    "mae": 0.21964886133362116,
+    "rmse": 0.24313765394919673,
+    "mape": 3.772716617902706,
+    "r2": 0.6134010310842719,
+    "correlation": 0.8252937734063632,
+    "months": 24.0,
+    "directional_accuracy": 0.6
+  },
+  "artifacts": {
+    "forecaster": "/mnt/data/power_econ_agent/artifacts/models/forecaster.pt",
+    "scalers": "/mnt/data/power_econ_agent/artifacts/models/scalers.joblib",
+    "metadata": "/mnt/data/power_econ_agent/artifacts/models/model_metadata.json",
+    "calibration": "/mnt/data/power_econ_agent/artifacts/models/anomaly_calibration.json",
+    "test_scores": "/mnt/data/power_econ_agent/artifacts/outputs/test_anomaly_scores.csv",
+    "events": "/mnt/data/power_econ_agent/artifacts/outputs/detected_events.json",
+    "latest_forecast": "/mnt/data/power_econ_agent/artifacts/outputs/latest_forecast.csv",
+    "vae": "/mnt/data/power_econ_agent/artifacts/models/vae.pt",
+    "nowcaster": "/mnt/data/power_econ_agent/artifacts/models/economic_nowcaster.joblib"
+  },
+  "metadata": {
+    "device": "cpu",
+    "duration_seconds": 21.7628436088562,
+    "train_rows": 12280,
+    "validation_rows": 2632,
+    "test_rows": 2632,
+    "detected_test_events": 30
+  }
+}

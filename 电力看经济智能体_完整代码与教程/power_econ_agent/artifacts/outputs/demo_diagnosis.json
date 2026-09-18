@@ -1,0 +1,121 @@
+{
+  "event": {
+    "event_id": "6786696aebfd6c7c",
+    "timestamp": "2024-05-04T10:00:00+08:00",
+    "region": "杭州示范区",
+    "observed_load_mw": 1317.6187633819625,
+    "expected_load_mw": 1439.8640137314687,
+    "lower_mw": 1380.7393532395254,
+    "upper_mw": 1492.678600370873,
+    "residual_mw": -122.24525034950625,
+    "forecast_score": 3.5767686933954685,
+    "vae_score": 30.221941610213804,
+    "anomaly_score": 12.902579214281886,
+    "threshold": 2.98044966211476,
+    "severity": "critical",
+    "is_anomaly": true,
+    "gate_weights": {
+      "load": 0.5175483822822571,
+      "weather": 0.14287208020687103,
+      "calendar": 0.03474041447043419,
+      "macro": 0.09515134245157242,
+      "event": 0.20968779921531677
+    },
+    "true_label": 1,
+    "true_cause": "policy_demand_response"
+  },
+  "top_causes": [
+    {
+      "cause_id": "demand_response",
+      "label": "需求响应、错峰或政策事件",
+      "category": "policy",
+      "score": 1.03,
+      "confidence": 1.0,
+      "evidence": [
+        "事件日历标记了需求响应/政策事件",
+        "负荷低于期望 -122.2 MW",
+        "事件与数据质量通道解释占比为 29.1%"
+      ],
+      "counter_evidence": [],
+      "related_nodes": [
+        "policy",
+        "grid_operation",
+        "政策与事件（caused_by）",
+        "电网运行（affects）"
+      ]
+    },
+    {
+      "cause_id": "holiday_effect",
+      "label": "节假日与调休效应",
+      "category": "calendar",
+      "score": 0.85,
+      "confidence": 0.8252427184466019,
+      "evidence": [
+        "该时点位于节假日/休息日",
+        "负荷低于模型期望 -122.2 MW",
+        "下降发生在生产经营时段"
+      ],
+      "counter_evidence": [],
+      "related_nodes": [
+        "calendar",
+        "production",
+        "日历因素（caused_by）",
+        "企业生产（affects）"
+      ]
+    },
+    {
+      "cause_id": "industrial_slowdown",
+      "label": "工业活动走弱",
+      "category": "economic",
+      "score": 0.46,
+      "confidence": 0.42592592592592593,
+      "evidence": [
+        "实测负荷低于期望 -122.2 MW",
+        "偏离集中于生产经营时段"
+      ],
+      "counter_evidence": [],
+      "related_nodes": [
+        "production",
+        "企业生产（indicates）"
+      ]
+    }
+  ],
+  "feature_contributions": [
+    {
+      "group": "load",
+      "contribution_mw": -23.075934932996972,
+      "normalized_importance": 0.6621348543249426
+    },
+    {
+      "group": "event",
+      "contribution_mw": 10.14520887269833,
+      "normalized_importance": 0.2911039755713071
+    },
+    {
+      "group": "calendar",
+      "contribution_mw": -1.4210074008215428,
+      "normalized_importance": 0.040774015487113305
+    },
+    {
+      "group": "macro",
+      "contribution_mw": 0.15865785719721653,
+      "normalized_importance": 0.004552487145930032
+    },
+    {
+      "group": "weather",
+      "contribution_mw": -0.04999932111756313,
+      "normalized_importance": 0.00143466747070707
+    }
+  ],
+  "knowledge_snippets": [
+    "[03_节假日与需求响应.md / 03_节假日与需求响应] 需求响应、限电、错峰生产和电价激励可能造成有组织的负荷下降。事件日历、调度通知和企业参与名单是关键证据。没有事件记录时，系统只能给出候选解释，不能声称已经确认政策因果。",
+    "[03_节假日与需求响应.md / 03_节假日与需求响应] 法定节假日、周末和调休会改变工业开工与商业营业节奏。生产时段负荷下降如果与节假日重合，应首先归因于日历因素；节后恢复速度可作为补充观察指标。",
+    "[01_电力负荷与经济活动.md / 01_电力负荷与经济活动] 总用电量同时受天气、节假日、电价、需求响应、新能源出力、设备检修、产业结构和数据质量影响。任何“经济走强/走弱”判断都必须先排除显著非经济扰动，并检查持续时间、时段分布和多源证据是否一致。",
+    "[01_电力负荷与经济活动.md / 01_电力负荷与经济活动] 较可信的经济信号通常具备：在生产经营时段出现；持续数日而非单点；天气处于常态区间；节假日与政策事件解释不足；行业或宏观指标方向一致；数据质量正常。只有部分条件满足时，应使用“可能”“需复核”等表述。"
+  ],
+  "economic_signal": "当前主要由非经济扰动解释，原始负荷不宜直接作为经济变化结论。",
+  "narrative": "该时点实测负荷低于期望值 122.2 MW。首要候选原因为“需求响应、错峰或政策事件”，证据包括：事件日历标记了需求响应/政策事件；负荷低于期望 -122.2 MW；事件与数据质量通道解释占比为 29.1%。",
+  "uncertainty": "本诊断来自预测残差、VAE重构、特征消融和规则知识的联合排序，不是严格因果识别；置信度受负荷口径、事件日历和行业分项数据完整性影响。",
+  "needs_human_review": false,
+  "generated_at": "2026-07-13T14:18:56.299759Z"
+}

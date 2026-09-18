@@ -1,0 +1,42 @@
+# 论文
+
+1.《Composite GDP nowcasting using macroeconomic variables and electricity data》：基于混合频率动态因子的宏观指标即时预测架构
+
+2.《Multi-Agent Large Language Model-based Economic Sandbox》：面向真实数据稀疏场景的偏好对齐与平均场机制
+
+3.《Advancing Multi-Agent Systems Through Model Context Protocol: Architecture, Implementation, and Applications》:系统性地阐述了 MCP 如何在理论和工程实施层面重塑 AI 智能体的协作边界
+
+
+
+# 项目（Github）
+
+1.https://github.com/qingsongedu/Awesome-TimeSeries-SpatioTemporal-LM-LLM
+
+### 时序数据的语言空间重编程与大语言模型对齐
+
+2.https://github.com/NiharJani2002/nexus-forecasting
+
+### 宏微观推理融合的预测多智能体网络：Nexus
+
+3.https://github.com/tsinghua-fib-lab/ACL24-EconAgent
+
+### EconAgent：基于大模型的微观基础与宏观涌现架构
+
+4.https://github.com/microsoft/argos
+
+### Argos：驱动异常检测闭环的自主规则生成智能体系统
+
+5.https://github.com/wen-ye-xwz/TS-Reasoner
+
+### TS-Reasoner：逻辑规划与数值执行解耦的领域推断引擎
+
+6.https://github.com/yyysjz1997/Time-RA
+
+https://github.com/350234/CausalTAD
+
+### Time-RA 与 CausalTAD：注入因果图谱与多模态诊断的知识增强
+
+7.https://github.com/modelcontextprotocol/servers
+
+### MCP 赋能 RAG 与多智能体全链路协同机制
+

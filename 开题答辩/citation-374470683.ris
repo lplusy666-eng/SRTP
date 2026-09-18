@@ -1,0 +1,13 @@
+TY  - BOOK
+AU  - Zheng, Peijun
+AU  - Zhou, Heng
+AU  - Liu, Jiang
+AU  - Nakanishi, Yosuke
+PY  - 2023/11/01
+SP  - 
+N2  - This study proposes DECPR, an interpretable decomposition method, explaining decomposed subsequences. • TFT, a deep learning-based approach with interpretability, predicts hourly energy consumption for the next day. • The interpretability of TFT model are used to analyze the effects of exogenous variables on energy consumption • The proposed DECPR-TFT model outperforms others, with 6.11% MAPE, significantly lower than competitors. A R T I C L E I N F O Keywords: Building energy consumption forecasting Attention mechanism Interpretable decomposition method Interpretable deep learning model A B S T R A C T Accurate building energy consumption forecasting is crucial for developing efficient building energy management systems, improving energy efficiency, and local building energy supervision and management. However, short-term building energy consumption forecasting is challenging due to highly non-smooth and volatile trends. In this paper, we present a novel methodology that combines interpretable decomposition methods with an interpretable forecasting model. We first illustrate a daily energy consumption pattern recognition (DECPR) method, which decomposes daily energy consumption patterns into interpretable energy consumption sub-sequences. To achieve satisfactory forecasting performance, we design the vector representation of each sub-sequence as a static input to the temporal fusion transformers (TFT) model. This vector representation integrates the DECPR method into the TFT model. The TFT model produces interpretable outputs, such as the attention analysis of different step lengths and the visualization of the importance ranking of exogenous variables, including meteorological data, calendar information, and the vector representation. Empirical studies demonstrate that our proposed DECPR-TFT system outperforms comparable models with a mean absolute percentage error (MAPE) of 6.11%, which is significantly lower than other models. These interpretable outputs provide valuable insights for researchers seeking to develop energy-saving operation strategies in buildings. Overall, our methodology offers a promising solution for short-term building energy consumption forecasting that can contribute to more efficient building energy management and energy-saving operation strategies.
+T1  - Interpretable building energy consumption forecasting using spectral clustering algorithm and temporal fusion transformers architecture
+VL  - 349
+DO  - 10.1016/j.apenergy.2023.121607
+JO  - Applied Energy
+ER  - 

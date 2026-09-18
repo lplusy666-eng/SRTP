@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "power-economy-agent": {
+      "command": "power-econ",
+      "args": [
+        "mcp",
+        "--config",
+        "/ABSOLUTE/PATH/power_econ_agent/configs/demo.yaml",
+        "--transport",
+        "stdio"
+      ]
+    }
+  }
+}

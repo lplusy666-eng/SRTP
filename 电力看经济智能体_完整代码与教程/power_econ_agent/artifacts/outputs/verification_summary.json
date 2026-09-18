@@ -1,0 +1,62 @@
+{
+  "config": "/mnt/data/power_econ_agent/configs/demo.yaml",
+  "checks": {
+    "load_orchestrator": {
+      "status": "pass",
+      "duration_seconds": 0.6467
+    },
+    "latest_forecast": {
+      "status": "pass",
+      "duration_seconds": 0.1599,
+      "rows": 24
+    },
+    "anomaly_monitor": {
+      "status": "pass",
+      "duration_seconds": 0.9606,
+      "events": 30
+    },
+    "diagnosis": {
+      "status": "pass",
+      "duration_seconds": 0.0007,
+      "event_id": "c26032440338a4ba",
+      "top_cause": "节假日与调休效应"
+    },
+    "report": {
+      "status": "pass",
+      "duration_seconds": 0.4467,
+      "report_id": "7c08e3c84148d4aa",
+      "path": "/mnt/data/power_econ_agent/artifacts/reports/7c08e3c84148d4aa.md"
+    },
+    "qa": {
+      "status": "pass",
+      "duration_seconds": 0.004,
+      "confidence": 0.75
+    },
+    "fastapi": {
+      "status": "pass",
+      "duration_seconds": 1.8735,
+      "health": {
+        "status": "ok",
+        "config": "/mnt/data/power_econ_agent/configs/demo.yaml",
+        "features_ready": true,
+        "model_ready": true
+      },
+      "forecast_rows": 24,
+      "anomaly_rows": 3
+    }
+  },
+  "status": "pass",
+  "summary": {
+    "rows": 17544,
+    "feature_count": 39,
+    "group_count": 5,
+    "forecast_horizon": 24,
+    "test_period": [
+      "2024-09-13 08:00:00+08:00",
+      "2024-12-31 23:00:00+08:00"
+    ],
+    "representative_events": 30,
+    "diagnosed_event_id": "c26032440338a4ba",
+    "report_id": "7c08e3c84148d4aa"
+  }
+}

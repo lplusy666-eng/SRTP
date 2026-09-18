@@ -1,0 +1,32 @@
+{
+  "status": "pass",
+  "rows": 17544,
+  "start": "2023-01-01 00:00:00+08:00",
+  "end": "2024-12-31 23:00:00+08:00",
+  "duplicates": 0,
+  "irregular_intervals": 0,
+  "negative_load": 0,
+  "infinite_values": 0,
+  "null_rates": {
+    "timestamp": 0.0,
+    "region": 0.0,
+    "load_mw": 0.0,
+    "temperature_2m": 0.0,
+    "relative_humidity_2m": 0.0,
+    "precipitation": 0.0,
+    "wind_speed_10m": 0.0,
+    "industrial_yoy": 0.0,
+    "pmi": 0.0,
+    "retail_yoy": 0.0,
+    "power_consumption_yoy": 0.0,
+    "electricity_price_index": 0.0,
+    "renewable_share": 0.0,
+    "is_weekend": 0.0,
+    "is_holiday": 0.0,
+    "policy_event": 0.0,
+    "sensor_quality": 0.0,
+    "anomaly_label": 0.0,
+    "anomaly_cause": 0.0
+  },
+  "warnings": []
+}

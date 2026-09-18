@@ -1,0 +1,5 @@
+date,policy_event,event_name,is_holiday,is_workday_override
+2024-02-10,0,春节,1,0
+2024-02-18,0,春节调休工作日,0,1
+2024-05-04,1,需求响应演练,1,0
+2024-05-06,1,错峰生产通知,0,0

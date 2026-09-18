@@ -1,0 +1,7 @@
+@prefix js: <https://example.org/jiangsu-power-economy/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+js:Region a rdfs:Class . js:Indicator a rdfs:Class . js:Observation a rdfs:Class .
+js:Month a rdfs:Class . js:Quarter a rdfs:Class . js:Concept a rdfs:Class .
+js:measures a rdf:Property . js:atTime a rdf:Property . js:fromSource a rdf:Property .
+js:mayAffect a rdf:Property . js:candidateCause a rdf:Property .

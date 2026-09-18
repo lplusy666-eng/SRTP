@@ -1,0 +1,226 @@
+{
+  "generated_at": "2026-07-24T11:32:50",
+  "software": {
+    "python": "3.12.5",
+    "numpy": "2.5.1",
+    "statsmodels": "0.14.6",
+    "matplotlib": "3.11.1"
+  },
+  "regions": {
+    "浙江": {
+      "electricity": {
+        "region": "浙江",
+        "n_observations": 51,
+        "start": "2021-01-01",
+        "end": "2025-03-01",
+        "stl_parameters": {
+          "period": 12,
+          "seasonal": 13,
+          "trend": 21,
+          "low_pass": 13,
+          "robust": true
+        },
+        "trend_start": 452.6273,
+        "trend_end": 587.4315,
+        "trend_growth_pct": 29.78,
+        "trend_strength": 0.681,
+        "seasonal_strength": 0.8539,
+        "seasonal_profile": {
+          "1": -61.4642,
+          "2": -109.4419,
+          "3": -7.2833,
+          "4": -37.6155,
+          "5": -21.9104,
+          "6": -4.9863,
+          "7": 125.2304,
+          "8": 134.0501,
+          "9": 55.7889,
+          "10": -38.027,
+          "11": -40.7811,
+          "12": 15.4807
+        },
+        "annual_totals": {
+          "2021": 5514.11,
+          "2022": 5799.35,
+          "2023": 6192.0,
+          "2024": 6780.85,
+          "2025": 1527.16
+        },
+        "full_years": [
+          2021,
+          2022,
+          2023,
+          2024
+        ],
+        "strong_anomaly_count": 5,
+        "watch_anomaly_count": 5
+      },
+      "gdp": {
+        "region": "浙江",
+        "sectors": {
+          "第一产业": {
+            "n_quarters": 64,
+            "growth_trend_strength": 0.7886,
+            "growth_seasonal_strength": 0.244,
+            "growth_anomalies": 0
+          },
+          "第二产业": {
+            "n_quarters": 64,
+            "growth_trend_strength": 0.2227,
+            "growth_seasonal_strength": 0.0,
+            "growth_anomalies": 7
+          },
+          "第三产业": {
+            "n_quarters": 64,
+            "growth_trend_strength": 0.4876,
+            "growth_seasonal_strength": 0.0,
+            "growth_anomalies": 7
+          }
+        }
+      }
+    },
+    "苏州": {
+      "electricity": {
+        "region": "苏州",
+        "n_observations": 14,
+        "start": "2025-02-01",
+        "end": "2026-04-01",
+        "stl_parameters": {
+          "period": 4,
+          "seasonal": 7,
+          "trend": 13,
+          "low_pass": 7,
+          "robust": true
+        },
+        "trend_start": 165.048,
+        "trend_end": 201.0479,
+        "trend_growth_pct": 21.81,
+        "trend_strength": 0.1263,
+        "seasonal_strength": 0.578,
+        "seasonal_profile": {
+          "1": 0.0,
+          "2": 98.834,
+          "3": -23.9408,
+          "4": -37.1059,
+          "5": -24.7359,
+          "6": 57.5639,
+          "7": -23.728,
+          "8": -26.9805,
+          "9": 34.279,
+          "10": 10.7537,
+          "11": -35.6307,
+          "12": -27.2825
+        },
+        "annual_totals": {
+          "2025": 1957.55,
+          "2026": 604.51
+        },
+        "full_years": [],
+        "strong_anomaly_count": 5,
+        "watch_anomaly_count": 0
+      }
+    },
+    "南京": {
+      "annual": {
+        "region": "南京",
+        "n_observations": 24,
+        "start_year": 2000,
+        "end_year": 2023,
+        "stl_parameters": {
+          "period": 5,
+          "seasonal": 7,
+          "trend": 9,
+          "low_pass": 7,
+          "robust": true
+        },
+        "trend_start": 1175914.46,
+        "trend_end": 7351298.24,
+        "trend_growth_pct": 525.16,
+        "trend_strength": 0.999,
+        "seasonal_strength": 0.6505,
+        "strong_anomaly_count": 0,
+        "watch_anomaly_count": 0
+      },
+      "monthly": {
+        "region": "南京",
+        "n_observations": 14,
+        "start": "2025-02-01",
+        "end": "2026-04-01",
+        "stl_parameters": {
+          "period": 4,
+          "seasonal": 7,
+          "trend": 13,
+          "low_pass": 7,
+          "robust": true
+        },
+        "trend_start": 68.3327,
+        "trend_end": 86.5285,
+        "trend_growth_pct": 26.63,
+        "trend_strength": 0.0956,
+        "seasonal_strength": 0.5326,
+        "seasonal_profile": {
+          "1": 0.0,
+          "2": 53.5676,
+          "3": -13.9873,
+          "4": -21.4216,
+          "5": -11.3904,
+          "6": 32.0632,
+          "7": -14.6846,
+          "8": -14.348,
+          "9": 18.9674,
+          "10": 6.3163,
+          "11": -20.825,
+          "12": -12.8184
+        },
+        "annual_totals": {
+          "2025": 823.78,
+          "2026": 258.32
+        },
+        "full_years": [],
+        "strong_anomaly_count": 5,
+        "watch_anomaly_count": 0
+      }
+    },
+    "江门": {
+      "electricity": {
+        "region": "江门",
+        "n_observations": 15,
+        "start": "2025-02-01",
+        "end": "2026-05-01",
+        "stl_parameters": {
+          "period": 5,
+          "seasonal": 7,
+          "trend": 13,
+          "low_pass": 7,
+          "robust": true
+        },
+        "trend_start": 36.7165,
+        "trend_end": 39.5047,
+        "trend_growth_pct": 7.59,
+        "trend_strength": 0.0703,
+        "seasonal_strength": 0.8678,
+        "seasonal_profile": {
+          "1": 0.0,
+          "2": 12.7042,
+          "3": -4.789,
+          "4": -3.3688,
+          "5": -1.2347,
+          "6": 0.7714,
+          "7": 2.9667,
+          "8": 4.7972,
+          "9": -4.5765,
+          "10": -2.2438,
+          "11": 0.1389,
+          "12": -5.2299
+        },
+        "annual_totals": {
+          "2025": 411.27,
+          "2026": 163.14
+        },
+        "full_years": [],
+        "strong_anomaly_count": 2,
+        "watch_anomaly_count": 2
+      }
+    }
+  }
+}

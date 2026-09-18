@@ -1,0 +1,413 @@
+{
+  "run_timestamp": "2026-07-24T02:39:21",
+  "region": {
+    "code": "CN-ZJ",
+    "name": "浙江省"
+  },
+  "method": {
+    "electricity": {
+      "period": 12,
+      "seasonal": 13,
+      "robust": true,
+      "medium_threshold": 0.05,
+      "high_threshold": 0.08
+    },
+    "gdp": {
+      "period": 4,
+      "seasonal": 7,
+      "robust": true,
+      "medium_threshold": 0.05,
+      "high_threshold": 0.08
+    },
+    "equation": "log(y_t) = trend_t + seasonal_t + residual_t",
+    "anomaly_rule": "medium if |residual_pct| >= 5%; high if >= 8%"
+  },
+  "electricity": {
+    "seasonal_strength": 0.7841664141085957,
+    "trend_strength": 0.5648778830137922,
+    "residual_mad_log": 0.004729105829952118,
+    "residual_std_log": 0.07648322415149839,
+    "n_observations": 51,
+    "start": "2021-01",
+    "end": "2025-03",
+    "trend_start": 450.3299111028342,
+    "trend_end": 580.3630924328938,
+    "trend_cagr": 0.06285159925756112,
+    "annual_total_2024": 6780.85149367,
+    "high_anomaly_count": 7,
+    "medium_anomaly_count": 3,
+    "high_anomalies": [
+      {
+        "period": "2021-01",
+        "observed": 465.5998,
+        "expected": 422.7499879800427,
+        "residual_pct": 0.10135970014972573,
+        "endpoint_warning": true,
+        "spring_festival_window": true
+      },
+      {
+        "period": "2021-02",
+        "observed": 256.1031,
+        "expected": 357.88967032014205,
+        "residual_pct": -0.2844076785705807,
+        "endpoint_warning": true,
+        "spring_festival_window": true
+      },
+      {
+        "period": "2022-09",
+        "observed": 483.3107,
+        "expected": 546.3862139337504,
+        "residual_pct": -0.11544126173981084,
+        "endpoint_warning": false,
+        "spring_festival_window": false
+      },
+      {
+        "period": "2023-01",
+        "observed": 341.1477,
+        "expected": 446.5986243897726,
+        "residual_pct": -0.2361201280766585,
+        "endpoint_warning": false,
+        "spring_festival_window": true
+      },
+      {
+        "period": "2023-02",
+        "observed": 442.2964,
+        "expected": 400.38860713072575,
+        "residual_pct": 0.10466779554392147,
+        "endpoint_warning": false,
+        "spring_festival_window": true
+      },
+      {
+        "period": "2024-01",
+        "observed": 551.65441834,
+        "expected": 468.72088632366615,
+        "residual_pct": 0.17693585764186692,
+        "endpoint_warning": false,
+        "spring_festival_window": true
+      },
+      {
+        "period": "2024-02",
+        "observed": 354.77613499,
+        "expected": 432.5600871562116,
+        "residual_pct": -0.17982230556126477,
+        "endpoint_warning": false,
+        "spring_festival_window": true
+      }
+    ],
+    "month_seasonal_factors": [
+      {
+        "month": 1,
+        "average_seasonal_factor": 0.8912358633519812,
+        "average_effect_pct": -10.876413664801877,
+        "n": 5
+      },
+      {
+        "month": 2,
+        "average_seasonal_factor": 0.7942322260277228,
+        "average_effect_pct": -20.57677739722772,
+        "n": 5
+      },
+      {
+        "month": 3,
+        "average_seasonal_factor": 0.994442802155173,
+        "average_effect_pct": -0.5557197844827,
+        "n": 5
+      },
+      {
+        "month": 4,
+        "average_seasonal_factor": 0.9345768656461654,
+        "average_effect_pct": -6.542313435383463,
+        "n": 4
+      },
+      {
+        "month": 5,
+        "average_seasonal_factor": 0.9662914174791559,
+        "average_effect_pct": -3.3708582520844077,
+        "n": 4
+      },
+      {
+        "month": 6,
+        "average_seasonal_factor": 1.0015152009574828,
+        "average_effect_pct": 0.15152009574828096,
+        "n": 4
+      },
+      {
+        "month": 7,
+        "average_seasonal_factor": 1.2531478052657574,
+        "average_effect_pct": 25.314780526575742,
+        "n": 4
+      },
+      {
+        "month": 8,
+        "average_seasonal_factor": 1.2657583211795027,
+        "average_effect_pct": 26.57583211795027,
+        "n": 4
+      },
+      {
+        "month": 9,
+        "average_seasonal_factor": 1.116664920003322,
+        "average_effect_pct": 11.666492000332207,
+        "n": 4
+      },
+      {
+        "month": 10,
+        "average_seasonal_factor": 0.9349331939520172,
+        "average_effect_pct": -6.506680604798277,
+        "n": 4
+      },
+      {
+        "month": 11,
+        "average_seasonal_factor": 0.9309728780366362,
+        "average_effect_pct": -6.90271219633638,
+        "n": 4
+      },
+      {
+        "month": 12,
+        "average_seasonal_factor": 1.039518446547683,
+        "average_effect_pct": 3.9518446547682995,
+        "n": 4
+      }
+    ]
+  },
+  "gdp": {
+    "n_observations": 312,
+    "metrics_by_industry": {
+      "第一产业": {
+        "seasonal_strength": 0.9883600936427347,
+        "trend_strength": 0.9942904162176919,
+        "residual_mad_log": 0.008438424929289923,
+        "residual_std_log": 0.03495654246932774,
+        "n_observations": 104
+      },
+      "第二产业": {
+        "seasonal_strength": 0.8063755218662573,
+        "trend_strength": 0.9954680074575444,
+        "residual_mad_log": 0.005787759537413173,
+        "residual_std_log": 0.050193323138270525,
+        "n_observations": 104
+      },
+      "第三产业": {
+        "seasonal_strength": 0.822007682236626,
+        "trend_strength": 0.9984090441481908,
+        "residual_mad_log": 0.007871261077974978,
+        "residual_std_log": 0.03936769854555142,
+        "n_observations": 104
+      }
+    },
+    "high_anomaly_count": 22,
+    "medium_anomaly_count": 19,
+    "high_anomalies": [
+      {
+        "industry": "第三产业",
+        "period": "2000Q2",
+        "observed": 454.36000000000007,
+        "expected": 500.03049293411544,
+        "residual_pct": -0.09133541569860415,
+        "revision_risk": false,
+        "endpoint_warning": true
+      },
+      {
+        "industry": "第三产业",
+        "period": "2000Q4",
+        "observed": 699.5699999999999,
+        "expected": 615.9903657528138,
+        "residual_pct": 0.1356833465163727,
+        "revision_risk": true,
+        "endpoint_warning": true
+      },
+      {
+        "industry": "第二产业",
+        "period": "2000Q4",
+        "observed": 1006.6100000000001,
+        "expected": 803.2382313554978,
+        "residual_pct": 0.253189851659954,
+        "revision_risk": true,
+        "endpoint_warning": true
+      },
+      {
+        "industry": "第三产业",
+        "period": "2001Q2",
+        "observed": 665.0,
+        "expected": 588.7960464038215,
+        "residual_pct": 0.12942334457170346,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第一产业",
+        "period": "2001Q3",
+        "observed": 150.0,
+        "expected": 133.67895259715596,
+        "residual_pct": 0.12209137703246253,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第一产业",
+        "period": "2002Q1",
+        "observed": 105.0,
+        "expected": 114.75613549731398,
+        "residual_pct": -0.08501624296630594,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2005Q2",
+        "observed": 1949.1799999999998,
+        "expected": 1703.0356024590692,
+        "residual_pct": 0.14453273741636097,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2005Q3",
+        "observed": 1564.2599999999998,
+        "expected": 1857.019082565071,
+        "residual_pct": -0.15765001303093107,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第三产业",
+        "period": "2005Q4",
+        "observed": 1843.7299999999996,
+        "expected": 1510.5454594428231,
+        "residual_pct": 0.22057233595609516,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2009Q1",
+        "observed": 2315.4,
+        "expected": 2517.663752164884,
+        "residual_pct": -0.08033787355081146,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第一产业",
+        "period": "2009Q2",
+        "observed": 262.0,
+        "expected": 286.90670253686864,
+        "residual_pct": -0.08681115608886147,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2009Q2",
+        "observed": 2752.1,
+        "expected": 3032.2269127835993,
+        "residual_pct": -0.0923832288416837,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2011Q2",
+        "observed": 4432.69,
+        "expected": 4058.5752091308104,
+        "residual_pct": 0.09217884887965644,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第三产业",
+        "period": "2014Q4",
+        "observed": 6402.3499999999985,
+        "expected": 5700.794761039691,
+        "residual_pct": 0.12306270763418259,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2017Q3",
+        "observed": 6488.68,
+        "expected": 5593.468244213882,
+        "residual_pct": 0.16004591725574957,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2017Q4",
+        "observed": 5807.93,
+        "expected": 6401.993650034329,
+        "residual_pct": -0.09279353940489199,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2019Q4",
+        "observed": 8728.879999999997,
+        "expected": 7033.664419483752,
+        "residual_pct": 0.2410145664357226,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第二产业",
+        "period": "2020Q1",
+        "observed": 4930.22,
+        "expected": 5647.6941870114915,
+        "residual_pct": -0.12703842723310532,
+        "revision_risk": false,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第一产业",
+        "period": "2023Q4",
+        "observed": 751.8499999999999,
+        "expected": 850.0409318131906,
+        "residual_pct": -0.115513180763829,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第一产业",
+        "period": "2024Q4",
+        "observed": 1032.0,
+        "expected": 865.8997121645704,
+        "residual_pct": 0.19182393238151474,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第三产业",
+        "period": "2024Q4",
+        "observed": 17367.0,
+        "expected": 14880.793845292746,
+        "residual_pct": 0.16707483354416053,
+        "revision_risk": true,
+        "endpoint_warning": false
+      },
+      {
+        "industry": "第三产业",
+        "period": "2025Q4",
+        "observed": 15532.0,
+        "expected": 17627.312787060146,
+        "residual_pct": -0.11886739699758841,
+        "revision_risk": true,
+        "endpoint_warning": true
+      }
+    ]
+  },
+  "knowledge_graph": {
+    "node_count": 647,
+    "edge_count": 1235
+  },
+  "model_input": {
+    "record_count": 363,
+    "schema_version": "1.0"
+  },
+  "data_quality": {
+    "check_count": 23,
+    "failed_checks": [],
+    "warning_count": 7
+  }
+}

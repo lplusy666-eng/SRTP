@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-07-23T21:01:26",
+  "period": "2024-01 to 2025-12",
+  "counts": {
+    "electricity_months": 24,
+    "gdp_quarters": 8,
+    "weather_months": 24,
+    "calendar_days": 731,
+    "nodes": 123,
+    "observations": 264,
+    "relationships": 857
+  },
+  "checks": {
+    "electricity_months_complete": true,
+    "weather_months_complete": true,
+    "gdp_quarters_complete": true,
+    "duplicate_node_ids": 0,
+    "duplicate_relationship_ids": 0,
+    "missing_relation_endpoints": [],
+    "electricity_official_source_coverage": true
+  },
+  "limitations": [
+    "天气为南京单点ERA5再分析代理，不是江苏全省加权观测。",
+    "季度GDP为年内累计值，不能直接当作单季度当季值。",
+    "最高负荷沿用月报原文，部分月份写全网最高负荷、部分写调度最高负荷，跨月比较须谨慎。",
+    "MAY_AFFECT、CANDIDATE_CAUSE表示机制先验或候选解释，不代表已证明因果。"
+  ]
+}

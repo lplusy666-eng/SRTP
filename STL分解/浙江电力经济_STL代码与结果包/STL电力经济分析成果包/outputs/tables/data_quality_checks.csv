@@ -1,0 +1,24 @@
+﻿check_id,dataset_id,check_name,passed,detail,severity
+E001,electricity_monthly,记录数,True,读取 51 条月度记录，范围 2021-01-01 至 2025-03-01,error
+E002,electricity_monthly,月度连续性,True,月份连续且无缺口,error
+E003,electricity_monthly,月份唯一性,True,每个月唯一,error
+E004,electricity_monthly,正值检查,True,全部用电量为正,error
+E005,electricity_monthly,指标一致性,True,指标名称：['全社会用电量'],error
+H001,holiday_calendar,覆盖年份,True,"解析到节假日通知年份：[2021, 2022, 2023, 2024, 2025]",error
+H002,holiday_calendar,春节事件,True,2021-2025 每年均解析到春节放假区间,error
+G_第一产业_001,gdp_第一产业,记录数,True,读取并转换 104 条单季度记录，范围 2000Q1 至 2025Q4,error
+G_第一产业_002,gdp_第一产业,单季度正值检查,True,全部差分后的单季度值为正,error
+G_第一产业_003,gdp_第一产业,季度完整性,True,每年 4 个季度完整,error
+G_第一产业_004,gdp_第一产业,Q4 修订风险标记,True,Q4 由全年累计值减前三季度累计值得到，可能集中吸收年度核算修订；已设置 revision_risk=True,warning
+G_第二产业_001,gdp_第二产业,记录数,True,读取并转换 104 条单季度记录，范围 2000Q1 至 2025Q4,error
+G_第二产业_002,gdp_第二产业,单季度正值检查,True,全部差分后的单季度值为正,error
+G_第二产业_003,gdp_第二产业,季度完整性,True,每年 4 个季度完整,error
+G_第二产业_004,gdp_第二产业,Q4 修订风险标记,True,Q4 由全年累计值减前三季度累计值得到，可能集中吸收年度核算修订；已设置 revision_risk=True,warning
+G_第三产业_001,gdp_第三产业,记录数,True,读取并转换 104 条单季度记录，范围 2000Q1 至 2025Q4,error
+G_第三产业_002,gdp_第三产业,单季度正值检查,True,全部差分后的单季度值为正,error
+G_第三产业_003,gdp_第三产业,季度完整性,True,每年 4 个季度完整,error
+G_第三产业_004,gdp_第三产业,Q4 修订风险标记,True,Q4 由全年累计值减前三季度累计值得到，可能集中吸收年度核算修订；已设置 revision_risk=True,warning
+V001,electricity_monthly,2024 年度总量外部核验,True,月度求和=6780.8515 亿千瓦时；公开报道=6780 亿千瓦时；相对差=0.013%,warning
+V_GDP_第一产业,gdp_第一产业,2025 全年累计值外部核验,True,原始累计值=2657 亿元；统计公报=2657 亿元,warning
+V_GDP_第二产业,gdp_第二产业,2025 全年累计值外部核验,True,原始累计值=35682 亿元；统计公报=35682 亿元,warning
+V_GDP_第三产业,gdp_第三产业,2025 全年累计值外部核验,True,原始累计值=56206 亿元；统计公报=56206 亿元,warning

@@ -1,0 +1,14 @@
+# 运行时依赖（全部为纯 CPU，无需 GPU、无需任何 API Key）
+pandas>=2.0
+numpy>=1.24
+statsmodels>=0.14
+pyyaml>=6.0
+pydantic>=2.5
+matplotlib>=3.7
+
+# 可选：接入大模型 API 时自行安装，本项目不硬依赖任何厂商 SDK
+# openai>=1.30
+# anthropic>=0.30
+
+# 可选：把工具层暴露成标准 MCP Server 时安装
+# mcp>=1.0
