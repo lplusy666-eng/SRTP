@@ -4,7 +4,7 @@ sk-f09df9c843c94778bcec4cab89fe008d
 
 ```powershell
 [Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "https://api.deepseek.com/anthropic", "User")
-[Environment]::SetEnvironmentVariable("ANTHROPIC_AUTH_TOKEN", "sk-f09df9c843c94778bcec4cab89fe008d", "User")
+[Environment]::SetEnvironmentVariable("ANTHROPIC_AUTH_TOKEN", "", "User")
 [Environment]::SetEnvironmentVariable("ANTHROPIC_MODEL", "deepseek-v4-pro[1m]", "User")
 [Environment]::SetEnvironmentVariable("ANTHROPIC_DEFAULT_OPUS_MODEL", "deepseek-v4-pro[1m]", "User")
 [Environment]::SetEnvironmentVariable("ANTHROPIC_DEFAULT_SONNET_MODEL", "deepseek-v4-pro[1m]", "User")
@@ -13,7 +13,7 @@ sk-f09df9c843c94778bcec4cab89fe008d
 [Environment]::SetEnvironmentVariable("CLAUDE_CODE_EFFORT_LEVEL", "max", "User")
 ```
 export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
-export ANTHROPIC_AUTH_TOKEN=sk-f09df9c843c94778bcec4cab89fe008d
+export ANTHROPIC_AUTH_TOKEN=
 export ANTHROPIC_MODEL=deepseek-v4-pro[1m]
 export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]
 export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro[1m]
@@ -23,7 +23,7 @@ export CLAUDE_CODE_EFFORT_LEVEL=max
 
 cat << 'EOF' >> ~/.bashrc
 export ANTHROPIC_BASE_URL="https://api.deepseek.com/anthropic"
-export ANTHROPIC_AUTH_TOKEN="sk-f09df9c843c94778bcec4cab89fe008d"
+export ANTHROPIC_AUTH_TOKEN=""
 export ANTHROPIC_MODEL="deepseek-v4-pro[1m]"
 export ANTHROPIC_DEFAULT_OPUS_MODEL="deepseek-v4-pro[1m]"
 export ANTHROPIC_DEFAULT_SONNET_MODEL="deepseek-v4-pro[1m]"
